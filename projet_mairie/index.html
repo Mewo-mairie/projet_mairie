@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mairie</title>
+    <link rel="stylesheet" href="assets/style.css" />
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+</head>
+
+<body>
+    <header>
+        <div id="logo-div">
+            <img src="assets/header_logo.png" alt="Logo mairie" />
+            <h1>Lend&Share</h1>
+        </div>
+        <form action="" role="search" aria-label="Recherche"></form>
+        <button id="connexion">connexion</button>
+    </header>
+
+    <main>
+        <aside>
+            <img id="hero" src="assets/images/pontAMousson.jpg" alt="">
+        </aside>
+        <div id="border"></div>
+        <h2>"Réservez votre produit en quelques clics"</h2>
+        <section id="how_it_works" aria-labelledby="howitworks-title">
+            <h3 id="howitworks-title">Comment ça marche&nbsp;?</h3>
+            <ol class="stepper" role="list">
+                <li class="stepper-item">
+                    <div class="stepper-dot" aria-hidden="true">1</div>
+                    <div class="stepper-content">
+                        <h4>Réservez votre produit</h4>
+                        <p>Vérifiez la disponibilité et validez votre réservation en ligne.</p>
+                    </div>
+                </li>
+                <li class="stepper-item">
+                    <div class="stepper-dot" aria-hidden="true">2</div>
+                    <div class="stepper-content">
+                        <h4>Récupérez à la mairie</h4>
+                        <p>Dès validation, retirez l’objet au comptoir dédié.</p>
+                    </div>
+                </li>
+                <li class="stepper-item">
+                    <div class="stepper-dot" aria-hidden="true">3</div>
+                    <div class="stepper-content">
+                        <h4>Rendez l’objet</h4>
+                        <p>Rapportez-le quand vous n’en avez plus besoin, simplement.</p>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <section id="categories" class="slider" aria-label="Catégories" data-slider>
+            <h3>Catégories</h3>
+            <button class="slider-btn prev" aria-label="Précédent">‹</button>
+
+            <div class="slider-track" tabindex="0" role="region" aria-label="Liste des catégories">
+                <div class="categorie">
+                    <h4>barnums</h4>
+                    <img class="categorie-image" src="assets/images/barnum.jpg" alt="">
+                </div>
+                <div class="categorie">
+                    <h4>chaises</h4>
+                    <img src="assets/images/chaise.jpg" alt="">
+                </div>
+                <div class="categorie">
+                    <h4>outils</h4>
+                    <img src="assets/images/outils.jpg" alt="">
+                </div>
+                <div class="categorie">
+                    <h4>vidéoprojecteurs</h4>
+                    <img src="assets/images/videoProjecteur.jpg" alt="">
+                </div>
+                <div class="categorie">etc</div>
+
+                <div class="best-categorie">sono</div>
+                <div class="best-categorie">tables</div>
+                <div class="best-categorie">barrières</div>
+            </div>
+
+            <button class="slider-btn next" aria-label="Suivant">›</button>
+        </section>
+
+
+        <section id="best_categories" class="slider" aria-label="Meilleures catégories" data-slider>
+            <button class="slider-btn prev" aria-label="Précédent">‹</button>
+            <h3>Produits récemment consultés</h3>
+            <div class="slider-track" tabindex="0" role="region" aria-label="Liste des meilleures catégories">
+                <div class="categorie">barnums</div>
+                <div class="categorie">chaises</div>
+                <div class="categorie">outils</div>
+                <div class="categorie">vidéoprojecteurs</div>
+                <div class="categorie">etc</div>
+                <div class="categorie">éclairage</div>
+                <div class="categorie">chauffages</div>
+                <div class="categorie">stands</div>
+            </div>
+
+            <button class="slider-btn next" aria-label="Suivant">›</button>
+        </section>
+    </main>
+
+    <footer>
+        <section id="footer-container">
+            <section>
+                <p>mentions legales</p>
+            </section>
+            <section>
+                <img src="assets/footer_logo.png" alt="Logo bas de page" />
+            </section>
+            <section>
+                <p>contact</p>
+            </section>
+        </section>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
