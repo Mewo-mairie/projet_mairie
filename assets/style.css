@@ -247,28 +247,28 @@ div#border {
     border-radius: 999px;
 }
 
-/* Élément */
 .stepper-item {
     position: relative;
     display: grid;
-    grid-template-columns: 36px 1fr;
     gap: 12px;
-    align-items: start;
+    align-items: center;
     counter-increment: etape;
-    z-index: 1; /* au-dessus de la barre */
+    z-index: 1;
+    justify-items: center;
 }
 
-/* Pastille numérotée */
 .stepper-dot {
-    width: 36px;
-    height: 36px;
+    width: 76px;
+    height: 76px;
     border-radius: 999px;
     display: grid;
     place-items: center;
-    background: #8b85a2;
-    color: #fff;
+    background: #ededf6;
+    color: #000000;
     font-weight: 800;
     box-shadow: inset 0 1px 0 #ffffff66, 0 2px 6px #00000033;
+    border: solid 1px black;
+    font-size: 1.7rem;
 }
 
 /* Contenu texte */
