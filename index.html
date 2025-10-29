@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mairie</title>
+    <title>Lend&Share - Réservation de matériel municipal</title>
+    <link rel="stylesheet" href="assets/common.css" />
     <link rel="stylesheet" href="assets/style.css" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 </head>
@@ -12,17 +13,21 @@
 <body>
     <header>
         <div id="logo-div">
-            <!-- emmanuel test  -->
-            <img src="assets/header_logo.png" alt="Logo mairie" />
+            <img src="assets/header_logo.png" alt="Logo Lend&Share" />
             <h1>Lend&Share</h1>
         </div>
-        <form action="" role="search" aria-label="Recherche"></form>
-        <button id="connexion">connexion</button>
+        <nav id="nav-principale">
+            <a href="pages/categories.php" class="bouton-catalogue">Accés au Catalogue Complet</a>
+        </nav>
+        <div id="boutons-auth">
+            <a href="pages/inscription.html" class="bouton-secondaire">Inscription</a>
+            <a href="pages/connexion.html" class="bouton-principal">Connexion</a>
+        </div>
     </header>
 
     <main>
         <aside>
-            <img id="hero" src="assets/images/pontAMousson.jpg" alt="">
+            <img id="hero" src="assets/images/pontAMousson.jpg" alt="Vue panoramique de Pont-à-Mousson">
         </aside>
         <div id="border"></div>
         <h2>"Réservez votre produit en quelques clics"</h2>
@@ -53,53 +58,34 @@
             </ol>
         </section>
 
-        <section id="categories" class="slider" aria-label="Catégories" data-slider>
+        <section id="categories" aria-label="Catégories">
             <h3>Catégories</h3>
-            <button class="slider-btn prev" aria-label="Précédent">‹</button>
-
-            <div class="slider-track" tabindex="0" role="region" aria-label="Liste des catégories">
-                <div class="categorie">
-                    <h4>barnums</h4>
-                    <img class="categorie-image" src="assets/images/barnum.jpg" alt="">
-                </div>
-                <div class="categorie">
-                    <h4>chaises</h4>
-                    <img src="assets/images/chaise.jpg" alt="">
-                </div>
-                <div class="categorie">
-                    <h4>outils</h4>
-                    <img src="assets/images/outils.jpg" alt="">
-                </div>
-                <div class="categorie">
-                    <h4>vidéoprojecteurs</h4>
-                    <img src="assets/images/videoProjecteur.jpg" alt="">
-                </div>
-                <div class="categorie">etc</div>
-
-                <div class="best-categorie">sono</div>
-                <div class="best-categorie">tables</div>
-                <div class="best-categorie">barrières</div>
+            <div class="grille-categories">
+                <a href="pages/categories.php?categorie=1" class="tile-categorie">
+                    <img src="assets/images/categories/barnum.jpg" alt="Barnums disponibles à la location">
+                    <h4>Barnums</h4>
+                </a>
+                <a href="pages/categories.php?categorie=2" class="tile-categorie">
+                    <img src="assets/images/categories/chaise.jpg" alt="Chaises disponibles à la location">
+                    <h4>Chaises</h4>
+                </a>
+                <a href="pages/categories.php?categorie=3" class="tile-categorie">
+                    <img src="assets/images/categories/outils.jpg" alt="Outils disponibles à la location">
+                    <h4>Outils</h4>
+                </a>
+                <a href="pages/categories.php?categorie=4" class="tile-categorie">
+                    <img src="assets/images/categories/videoProjecteur.jpg" alt="Vidéoprojecteurs disponibles à la location">
+                    <h4>Vidéoprojecteurs</h4>
+                </a>
             </div>
-
-            <button class="slider-btn next" aria-label="Suivant">›</button>
         </section>
 
 
-        <section id="best_categories" class="slider" aria-label="Meilleures catégories" data-slider>
-            <button class="slider-btn prev" aria-label="Précédent">‹</button>
-            <h3>Produits récemment consultés</h3>
-            <div class="slider-track" tabindex="0" role="region" aria-label="Liste des meilleures catégories">
-                <div class="categorie">barnums</div>
-                <div class="categorie">chaises</div>
-                <div class="categorie">outils</div>
-                <div class="categorie">vidéoprojecteurs</div>
-                <div class="categorie">etc</div>
-                <div class="categorie">éclairage</div>
-                <div class="categorie">chauffages</div>
-                <div class="categorie">stands</div>
+        <section id="best_categories" aria-label="Produits vedettes">
+            <h3>Produits vedettes</h3>
+            <div class="grille-categories" id="grille-vedettes">
+                <p style="grid-column: 1 / -1; text-align: center; color: #999;">Chargement des produits vedettes...</p>
             </div>
-
-            <button class="slider-btn next" aria-label="Suivant">›</button>
         </section>
     </main>
 
@@ -117,6 +103,7 @@
         </section>
     </footer>
 
+    <script src="assets/js/produits_vedettes.js"></script>
     <script src="script.js"></script>
 </body>
 
