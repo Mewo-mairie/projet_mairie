@@ -14,7 +14,7 @@ $modele_utilisateur = new ModeleUtilisateur();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+    echo json_encode(['succes' => false, 'message' => 'Méthode non autorisée']);
     exit;
 }
 
@@ -23,7 +23,7 @@ try {
     
     // Vérifier les champs requis
     if (empty($donnees['email_utilisateur']) || empty($donnees['mot_de_passe'])) {
-        echo json_encode(['success' => false, 'message' => 'Email et mot de passe requis']);
+        echo json_encode(['succes' => false, 'message' => 'Email et mot de passe requis']);
         exit;
     }
     
@@ -34,7 +34,7 @@ try {
     );
     
     if (!$utilisateur) {
-        echo json_encode(['success' => false, 'message' => 'Email ou mot de passe incorrect']);
+        echo json_encode(['succes' => false, 'message' => 'Email ou mot de passe incorrect']);
         exit;
     }
     
@@ -49,12 +49,12 @@ try {
     unset($utilisateur['mot_de_passe_hash']);
     
     echo json_encode([
-        'success' => true, 
+        'succes' => true, 
         'message' => 'Connexion réussie',
         'utilisateur' => $utilisateur
     ]);
     
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
+    echo json_encode(['succes' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
 }
