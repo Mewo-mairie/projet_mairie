@@ -1,9 +1,3 @@
-# Base de données SQLite
-database/*.db
-database/*.db-journal
-database/*.db-shm
-database/*.db-wal
-
 # Logs
 logs/*.log
 logs/*.txt
