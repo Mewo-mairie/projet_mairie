@@ -450,7 +450,7 @@
 
 .bouton-primaire {
     background: #0066ff;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .bouton-primaire:hover {
@@ -459,7 +459,7 @@
 
 .bouton-secondaire {
     background: #6c757d;
-    color: white;
+    color: rgb(9, 9, 9);
 }
 
 .bouton-secondaire:hover {

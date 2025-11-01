@@ -26,19 +26,24 @@ function afficherProduitsVedettes(produits) {
     
     produits.forEach(produit => {
         const card = document.createElement('div');
-        card.className = 'tile-categorie';
+        card.className = 'carte-produit';
         card.style.cursor = 'pointer';
         
-        const img = produit.image_url_produit 
-            ? `<img src="${produit.image_url_produit}" alt="${produit.nom_produit}">`
-            : `<div style="background: #eee; height: 200px; display: flex; align-items: center; justify-content: center;">
-                   <span style="color: #999;">Pas d'image</span>
-               </div>`;
+        // Définir l'image comme background de la carte
+        if (produit.image_url_produit) {
+            card.style.backgroundImage = `url('${produit.image_url_produit}')`;
+        } else {
+            card.style.backgroundColor = '#f5f5f5';
+        }
+        
+        // Badge vedette toujours affiché pour les produits vedettes
+        const badge = '<span class="badge-vedette">⭐ Vedette</span>';
         
         card.innerHTML = `
-            ${img}
-            <h4>${produit.nom_produit}</h4>
-            <p style="font-size: 0.9em; color: #666;">${produit.nom_categorie}</p>
+            ${badge}
+            <div class="info-produit">
+                <h3>${produit.nom_produit}</h3>
+            </div>
         `;
         
         card.addEventListener('click', () => {

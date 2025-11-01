@@ -5,7 +5,7 @@ session_start();
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, DELETE');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
 require_once __DIR__ . '/../models/modele_reservation.php';
@@ -20,9 +20,10 @@ try {
                 // Récupérer une réservation par ID
                 $reservation = $modele_reservation->obtenirReservationParId($_GET['id']);
                 echo json_encode(['success' => true, 'reservation' => $reservation]);
-            } elseif (isset($_GET['utilisateur'])) {
+            } elseif (isset($_GET['utilisateur']) || isset($_GET['id_utilisateur'])) {
                 // Récupérer les réservations d'un utilisateur
-                $reservations = $modele_reservation->obtenirReservationsUtilisateur($_GET['utilisateur']);
+                $idUtilisateur = isset($_GET['id_utilisateur']) ? $_GET['id_utilisateur'] : $_GET['utilisateur'];
+                $reservations = $modele_reservation->obtenirReservationsUtilisateur($idUtilisateur);
                 echo json_encode(['success' => true, 'reservations' => $reservations]);
             } else {
                 // Récupérer toutes les réservations (pour admin)
@@ -55,6 +56,18 @@ try {
             );
             
             echo json_encode(['success' => true, 'message' => 'Réservation créée', 'id' => $id]);
+            break;
+            
+        case 'PUT':
+            // Modifier le statut d'une réservation (admin)
+            $donnees = json_decode(file_get_contents('php://input'), true);
+            
+            $resultat = $modele_reservation->modifierStatutReservation(
+                $donnees['id_reservation'],
+                $donnees['statut_reservation']
+            );
+            
+            echo json_encode(['success' => $resultat, 'message' => 'Statut mis à jour']);
             break;
             
         case 'DELETE':

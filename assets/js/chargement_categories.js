@@ -1,7 +1,8 @@
 let categorie_selectionnee = null;
 let tous_les_produits = [];
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
+    await verifierEtAfficherOutilsAdmin();
     chargerCategories();
     chargerTousLesProduits();
     initialiserRecherche();
@@ -90,20 +91,28 @@ function afficherProduits(produits) {
         card.className = 'carte-produit';
         card.onclick = () => ouvrirModalProduit(produit.id_produit);
         
-        const img = produit.image_url_produit 
-            ? `<img src="${produit.image_url_produit}" alt="${produit.nom_produit}">`
-            : `<div class="placeholder-image">Pas d'image</div>`;
+        // Ajuster le chemin de l'image pour la page categories.php
+        const cheminImage = produit.image_url_produit 
+            ? (produit.image_url_produit.startsWith('assets/') 
+                ? '../' + produit.image_url_produit 
+                : produit.image_url_produit)
+            : null;
+        
+        // Définir l'image comme background de la carte
+        if (cheminImage) {
+            card.style.backgroundImage = `url('${cheminImage}')`;
+        } else {
+            card.style.backgroundColor = '#f5f5f5';
+        }
         
         const badge = produit.est_vedette == 1 
             ? '<span class="badge-vedette">⭐ Vedette</span>' 
             : '';
         
         card.innerHTML = `
-            ${img}
+            ${badge}
             <div class="info-produit">
-                <h3>${produit.nom_produit}</h3>
-                <p class="categorie">${produit.nom_categorie}</p>
-                ${badge}
+                <h4>${produit.nom_produit}</h4>
             </div>
         `;
         
@@ -136,4 +145,67 @@ function initialiserRecherche() {
             afficherProduits(produitsFiltres);
         });
     }
+}
+
+async function verifierEtAfficherOutilsAdmin() {
+    try {
+        const reponse = await fetch('../backend/api/api_verifier_session.php');
+        const donnees = await reponse.json();
+        
+        if (donnees.connecte && donnees.utilisateur.role_utilisateur === 'administrateur') {
+            afficherBarreOutilsAdmin();
+        }
+    } catch (erreur) {
+        console.log('Non connecté ou erreur:', erreur);
+    }
+}
+
+function afficherBarreOutilsAdmin() {
+    const main = document.querySelector('main#category');
+    
+    if (!main) return;
+    
+    const barreOutils = document.createElement('div');
+    barreOutils.className = 'barre-outils-admin';
+    barreOutils.innerHTML = `
+        <h3>Outils Administrateur</h3>
+        <button onclick="ouvrirModalAjouterProduit()" class="bouton-admin bouton-admin-ajouter">
+            ➕ Ajouter un produit
+        </button>
+    `;
+    
+    main.insertBefore(barreOutils, main.firstChild);
+    ajouterBoutonsAdminSurProduits();
+}
+
+function ajouterBoutonsAdminSurProduits() {
+    const observer = new MutationObserver(function() {
+        const cartes = document.querySelectorAll('.carte-produit');
+        cartes.forEach(carte => {
+            if (!carte.querySelector('.boutons-admin-produit')) {
+                ajouterBoutonsAdminSurCarte(carte);
+            }
+        });
+    });
+    
+    observer.observe(document.getElementById('conteneur-produits'), {
+        childList: true,
+        subtree: true
+    });
+}
+
+function ajouterBoutonsAdminSurCarte(carte) {
+    const boutonsAdmin = document.createElement('div');
+    boutonsAdmin.className = 'boutons-admin-produit';
+    boutonsAdmin.innerHTML = `
+        <button class="bouton-admin-mini bouton-modifier" title="Modifier">✏️</button>
+        <button class="bouton-admin-mini bouton-supprimer" title="Supprimer">🗑️</button>
+    `;
+    
+    carte.appendChild(boutonsAdmin);
+    boutonsAdmin.addEventListener('click', (e) => e.stopPropagation());
+}
+
+function ouvrirModalAjouterProduit() {
+    alert('Fonctionnalité d\'ajout de produit à implémenter');
 }

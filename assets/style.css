@@ -4,26 +4,28 @@
 #nav-principale {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 12px;
 }
 
 .bouton-catalogue {
-    padding: 10px 24px;
-    background: #7a84b424;
-    color: white;
+    padding: 8px 16px;
+    background: #7a84b400;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 300;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
-    text-shadow: 0px 1px #000000, 0 1px #000000, 1px 0 #000000a1, 0 -1px #0000005e;
+    /* text-shadow: 0px 1px #000000, 0 1px #000000, 1px 0 #000000a1, 0 -1px #0000005e; */
     border-top: solid 1px #ffffffb8;
     border-bottom: solid 1px #00000033;
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 .bouton-catalogue:hover {
-    transform: scale(1.4);
+    transform: scale(1.2);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 #boutons-auth {
@@ -34,40 +36,25 @@
 
 .bouton-principal,
 .bouton-secondaire {
-    padding: 10px 20px;
+    padding: 8px 16px;
+    background: #7a84b400;
+    color: rgb(0, 0, 0);
     text-decoration: none;
     border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.95rem;
+    font-weight: 300;
+    font-size: 0.9rem;
     transition: all 0.3s ease;
-}
-
-.bouton-principal {
-    background: #667eea80;
-    color: white;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    border-top: solid 1px #ffffff7a;
+    /* text-shadow: 0px 1px #000000, 0 1px #000000, 1px 0 #000000a1, 0 -1px #0000005e; */
+    border-top: solid 1px #ffffffb8;
     border-bottom: solid 1px #00000033;
-    text-shadow: 0px 1px #000000, 0 1px #000000, 1px 0 #000000a1, 0 -1px #0000005e;
+    transform: scale(1.1);
 }
 
-.bouton-principal:hover {
-    background: #5568d3;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-}
-
-.bouton-secondaire {
-    background: #ffffff33;
-    color: #667eea;
-    border-top: solid 1px #ffffff7a;
-    border-bottom: solid 1px #00000033;
-    text-shadow: 0px 1px #ffffff, 0 1px #ffffff, 1px 0 #ffffffa1, 0 -1px #ffffff5e;
-}
-
+.bouton-principal:hover,
 .bouton-secondaire:hover {
-    background: #f0f4ff;
-    transform: translateY(-1px);
+    transform: scale(1.2);
+    background: #ffffff;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 /* Responsive header */
@@ -94,7 +81,7 @@ aside {
     height: 390px;
 }
 
-img#hero {
+#hero {
     background: center center / cover no-repeat;
     position: absolute;
     top: 0;
@@ -230,18 +217,30 @@ div#border {
     padding: 0 16px;
 }
 
-#categories h3,
-#best_categories h3 {
+#categories h3, #best_categories h3 {
     margin: 0 0 24px 0;
     font-size: 1.8rem;
     color: #2c3e50;
+    text-align: center;
+    margin: 0 0 24px 0;
+    font-size: 1.8rem;
+    color: #ffffff;
+    text-align: center;
+    background-color: #ffffff24;
+    border-radius: 15px;
+    font-size: 18px;
+    backdrop-filter: blur(3px);
+    font-weight: 400;
 }
 
-/* Grille 3 colonnes pour les catégories */
+/* Grille 2 colonnes pour les catégories et produits vedettes */
 .grille-categories {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    padding: 24px;
+    width: 90%;
+    max-width: 1200px;
 }
 
 /* Tiles de catégories cliquables */
@@ -254,7 +253,7 @@ div#border {
     transition: all 0.3s ease;
     text-decoration: none;
     background: white;
-    height: 280px;
+    height: 350px;
 }
 
 .tile-categorie:hover {
@@ -264,8 +263,8 @@ div#border {
 
 .tile-categorie img {
     width: 100%;
-    height: 220px;
-    object-fit: cover;
+    height: 280px;
+    object-fit: contain;
     transition: transform 0.3s ease;
 }
 
@@ -284,13 +283,6 @@ div#border {
 }
 
 /* Responsive grille */
-@media (max-width: 900px) {
-    .grille-categories {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 16px;
-    }
-}
-
 @media (max-width: 600px) {
     .grille-categories {
         grid-template-columns: 1fr;
@@ -298,10 +290,10 @@ div#border {
     }
     
     .tile-categorie {
-        height: 260px;
+        height: 320px;
     }
     
     .tile-categorie img {
-        height: 200px;
+        height: 250px;
     }
 }

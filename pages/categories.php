@@ -12,17 +12,7 @@
 </head>
 <body>
     <header>
-        <div id="logo-div">
-            <a href="../index.html">
-                <img src="../assets/header_logo.png" alt="Logo Lend&Share" />
-            </a>
-            <h1>Lend&Share</h1>
-        </div>
-        <nav class="navigation-header">
-            <a href="../index.html">Accueil</a>
-            <a href="categories.php" class="lien-actif">Produits</a>
-        </nav>
-        <button id="connexion" class="bouton-connexion">connexion</button>
+        <!-- Le contenu sera généré par header.js -->
     </header>
 
     <main id="category">
@@ -60,6 +50,7 @@
         </section>
     </footer>
 
+    <script src="../assets/js/header.js"></script>
     <script src="../assets/js/chargement_categories.js"></script>
     <script src="../assets/js/modal_produit.js"></script>
     <script src="../assets/js/gestion_session.js"></script>

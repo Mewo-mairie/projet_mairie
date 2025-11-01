@@ -1,1 +1,3 @@
-For first commit
+admin :
+admin@lendshare.fr
+Admin123!

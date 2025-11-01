@@ -1,0 +1,187 @@
+#mon-compte {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 24px 40px;
+    min-height: calc(100vh - 200px);
+}
+
+#mon-compte h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5rem;
+    color: #2c3e50;
+}
+
+.zone-chargement {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.section-compte {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.section-compte h2 {
+    margin: 0 0 24px 0;
+    font-size: 1.8rem;
+    color: #2c3e50;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 12px;
+}
+
+.infos-utilisateur {
+    display: grid;
+    gap: 16px;
+}
+
+.info-item {
+    display: flex;
+    padding: 12px;
+    background: #f9f9f9;
+    border-radius: 8px;
+}
+
+.info-label {
+    font-weight: 600;
+    color: #2c3e50;
+    min-width: 120px;
+}
+
+.info-value {
+    color: #666;
+}
+
+.liste-reservations {
+    display: grid;
+    gap: 16px;
+}
+
+.reservation-card {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 16px;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reservation-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-infos {
+    display: grid;
+    gap: 8px;
+}
+
+.reservation-produit {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.reservation-client {
+    font-size: 1rem;
+    color: #666;
+}
+
+.reservation-date {
+    font-size: 0.9rem;
+    color: #999;
+}
+
+.reservation-statut {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.badge-statut {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-align: center;
+    min-width: 120px;
+}
+
+.statut-en_attente {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.statut-accepte {
+    background: #d4edda;
+    color: #155724;
+}
+
+.statut-refuse {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.statut-cloture {
+    background: #d1ecf1;
+    color: #0c5460;
+}
+
+.selecteur-statut {
+    padding: 10px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    background: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 150px;
+}
+
+.selecteur-statut:hover {
+    border-color: #0066ff;
+}
+
+.selecteur-statut:focus {
+    outline: none;
+    border-color: #0066ff;
+    box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+.message-vide {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-size: 1.1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    #mon-compte {
+        padding: 100px 16px 24px;
+    }
+
+    #mon-compte h1 {
+        font-size: 2rem;
+    }
+
+    .reservation-card {
+        grid-template-columns: 1fr;
+    }
+
+    .reservation-statut {
+        justify-content: space-between;
+    }
+
+    .selecteur-statut {
+        width: 100%;
+    }
+}

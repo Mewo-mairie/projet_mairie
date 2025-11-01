@@ -108,4 +108,20 @@ class ModeleReservation {
         $resultat = $stmt->fetch();
         return $resultat['nombre'] > 0;
     }
+    
+    // Modifie le statut d'une réservation (admin)
+    public function modifierStatutReservation($id_reservation, $nouveau_statut) {
+        $connexion_bd = obtenirConnexionBD();
+        
+        $requete = "UPDATE reservations 
+                    SET statut_reservation = :statut,
+                        date_modification_statut = CURRENT_TIMESTAMP
+                    WHERE id_reservation = :id";
+        
+        $stmt = $connexion_bd->prepare($requete);
+        $stmt->bindParam(':statut', $nouveau_statut);
+        $stmt->bindParam(':id', $id_reservation);
+        
+        return $stmt->execute();
+    }
 }

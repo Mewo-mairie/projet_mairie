@@ -33,7 +33,10 @@ function afficherModalProduit(produit) {
     const conteneur = modal.querySelector('#conteneur-formulaire-reservation');
     
     if (produit.image_url_produit) {
-        image.src = produit.image_url_produit;
+        const cheminImage = produit.image_url_produit.startsWith('assets/') 
+            ? '../' + produit.image_url_produit 
+            : produit.image_url_produit;
+        image.src = cheminImage;
         image.alt = produit.nom_produit;
     } else {
         image.src = '../assets/images/default-product.png';
@@ -102,7 +105,7 @@ function creerStructureModal() {
 function afficherFormulaireReservation(conteneur) {
     conteneur.innerHTML = `
         <div class="formulaire-reservation">
-            <h3>Réserver ce produit</h3>
+            <h4>Réserver ce produit</h4>
             
             <div id="message-reservation-modal" class="message-cache"></div>
             

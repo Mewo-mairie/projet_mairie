@@ -7,27 +7,21 @@
     <title>Lend&Share - Réservation de matériel municipal</title>
     <link rel="stylesheet" href="assets/common.css" />
     <link rel="stylesheet" href="assets/style.css" />
+    <link rel="stylesheet" href="assets/produits.css" />
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 </head>
 
 <body>
     <header>
-        <div id="logo-div">
-            <img src="assets/header_logo.png" alt="Logo Lend&Share" />
-            <h1>Lend&Share</h1>
-        </div>
-        <nav id="nav-principale">
-            <a href="pages/categories.php" class="bouton-catalogue">Accés au Catalogue Complet</a>
-        </nav>
-        <div id="boutons-auth">
-            <a href="pages/inscription.html" class="bouton-secondaire">Inscription</a>
-            <a href="pages/connexion.html" class="bouton-principal">Connexion</a>
-        </div>
+        <!-- Le contenu sera généré par header.js -->
     </header>
 
     <main>
         <aside>
-            <img id="hero" src="assets/images/pontAMousson.jpg" alt="Vue panoramique de Pont-à-Mousson">
+            <video id="hero" autoplay muted loop playsinline>
+                <source src="assets/videos/Create_a_timelaps_202510291656_2uypz.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture de vidéos.
+            </video>
         </aside>
         <div id="border"></div>
         <h2>"Réservez votre produit en quelques clics"</h2>
@@ -59,7 +53,7 @@
         </section>
 
         <section id="categories" aria-label="Catégories">
-            <h3>Catégories</h3>
+            <h2>Catégories</h2>
             <div class="grille-categories">
                 <a href="pages/categories.php?categorie=1" class="tile-categorie">
                     <img src="assets/images/categories/barnum.jpg" alt="Barnums disponibles à la location">
@@ -82,7 +76,7 @@
 
 
         <section id="best_categories" aria-label="Produits vedettes">
-            <h3>Produits vedettes</h3>
+            <h2>Produits vedettes</h2>
             <div class="grille-categories" id="grille-vedettes">
                 <p style="grid-column: 1 / -1; text-align: center; color: #999;">Chargement des produits vedettes...</p>
             </div>
@@ -103,6 +97,8 @@
         </section>
     </footer>
 
+    <script src="assets/js/header.js"></script>
+    <script src="assets/js/video_fade.js"></script>
     <script src="assets/js/produits_vedettes.js"></script>
     <script src="script.js"></script>
 </body>

@@ -88,6 +88,8 @@ try {
             id_utilisateur INTEGER NOT NULL,
             id_produit INTEGER NOT NULL,
             date_reservation DATETIME DEFAULT CURRENT_TIMESTAMP,
+            statut_reservation TEXT DEFAULT 'en_attente' CHECK(statut_reservation IN ('en_attente', 'accepte', 'refuse', 'cloture')),
+            date_modification_statut DATETIME,
             FOREIGN KEY (id_utilisateur) REFERENCES utilisateurs(id_utilisateur),
             FOREIGN KEY (id_produit) REFERENCES produits(id_produit)
         )
@@ -171,52 +173,113 @@ try {
     // Créer quelques produits d'exemple
     echo "Création de produits d'exemple...\n";
     $produits_exemple = [
+        // Barnums
         [
-            'nom' => 'Barnum 3x3m blanc',
-            'description' => 'Barnum pliant de 3x3 mètres, couleur blanche',
+            'nom' => 'Barnum Blanc 3x3m',
+            'description' => 'Barnum pliant de 3x3 mètres, structure robuste en aluminium, toile blanche imperméable',
             'categorie' => 'Barnums',
+            'image' => 'assets/images/produits/barnums/barnum_blanc.png',
             'est_vedette' => 1
         ],
         [
-            'nom' => 'Barnum 4x4m bleu',
-            'description' => 'Grand barnum de 4x4 mètres, couleur bleue',
+            'nom' => 'Barnum Bleu 4x4m',
+            'description' => 'Grand barnum de 4x4 mètres, idéal pour grands événements, toile bleue résistante aux UV',
             'categorie' => 'Barnums',
+            'image' => 'assets/images/produits/barnums/barnum_bleu.png',
             'est_vedette' => 0
         ],
         [
-            'nom' => 'Chaise pliante blanche',
-            'description' => 'Chaise pliante en plastique blanc',
+            'nom' => 'Barnum Standard',
+            'description' => 'Barnum polyvalent 3x3m pour tous types d\'événements',
+            'categorie' => 'Barnums',
+            'image' => 'assets/images/produits/barnums/barnum.jpg',
+            'est_vedette' => 0
+        ],
+        // Chaises
+        [
+            'nom' => 'Chaise Bleue Moderne',
+            'description' => 'Chaise empilable au design moderne, assise confortable en polypropylène bleu',
             'categorie' => 'Chaises',
+            'image' => 'assets/images/produits/chaises/chaise_bleu.jpg',
             'est_vedette' => 1
         ],
         [
-            'nom' => 'Chaise pliante noire',
-            'description' => 'Chaise pliante en plastique noir',
+            'nom' => 'Chaise en Bois Naturel',
+            'description' => 'Chaise en bois massif, finition naturelle, design élégant et intemporel',
             'categorie' => 'Chaises',
+            'image' => 'assets/images/produits/chaises/chaise_bois.jpg',
             'est_vedette' => 0
         ],
         [
-            'nom' => 'Perceuse visseuse',
-            'description' => 'Perceuse visseuse sans fil 18V avec batterie',
-            'categorie' => 'Outils',
-            'est_vedette' => 1
-        ],
-        [
-            'nom' => 'Tondeuse électrique',
-            'description' => 'Tondeuse à gazon électrique 1600W',
-            'categorie' => 'Outils',
+            'nom' => 'Chaise Marron Classique',
+            'description' => 'Chaise pliante couleur marron, légère et facile à ranger',
+            'categorie' => 'Chaises',
+            'image' => 'assets/images/produits/chaises/chaise_marron.jpg',
             'est_vedette' => 0
         ],
         [
-            'nom' => 'Vidéoprojecteur HD',
-            'description' => 'Vidéoprojecteur Full HD avec câbles HDMI',
-            'categorie' => 'Vidéoprojecteurs',
+            'nom' => 'Chaise en Osier Tressé',
+            'description' => 'Chaise artisanale en osier tressé, parfaite pour un style rustique et chaleureux',
+            'categorie' => 'Chaises',
+            'image' => 'assets/images/produits/chaises/chaise_osier.jpg',
+            'est_vedette' => 0
+        ],
+        [
+            'nom' => 'Chaise Standard',
+            'description' => 'Chaise polyvalente pour tous types d\'événements',
+            'categorie' => 'Chaises',
+            'image' => 'assets/images/produits/chaises/chaise.jpg',
+            'est_vedette' => 0
+        ],
+        // Outils
+        [
+            'nom' => 'Marteau de Menuisier',
+            'description' => 'Marteau professionnel avec manche ergonomique, tête forgée en acier trempé',
+            'categorie' => 'Outils',
+            'image' => 'assets/images/produits/outils/marteau.jpg',
+            'est_vedette' => 0
+        ],
+        [
+            'nom' => 'Perceuse Électrique',
+            'description' => 'Perceuse visseuse sans fil 18V avec batterie lithium-ion, 2 vitesses',
+            'categorie' => 'Outils',
+            'image' => 'assets/images/produits/outils/perceuse.jpg',
             'est_vedette' => 1
         ],
         [
-            'nom' => 'Écran de projection',
-            'description' => 'Écran de projection portable 200x150cm',
+            'nom' => 'Scie Électrique',
+            'description' => 'Scie circulaire électrique 1200W, lame de précision incluse',
+            'categorie' => 'Outils',
+            'image' => 'assets/images/produits/outils/scie.jpg',
+            'est_vedette' => 0
+        ],
+        [
+            'nom' => 'Tournevis Multifonction',
+            'description' => 'Set de tournevis de précision avec embouts interchangeables',
+            'categorie' => 'Outils',
+            'image' => 'assets/images/produits/outils/tourne_vis.jpg',
+            'est_vedette' => 0
+        ],
+        // Vidéoprojecteurs
+        [
+            'nom' => 'Vidéoprojecteur Full HD',
+            'description' => 'Vidéoprojecteur haute définition 1920x1080p, 3000 lumens, câbles HDMI inclus',
             'categorie' => 'Vidéoprojecteurs',
+            'image' => 'assets/images/produits/videoProjecteur/videoProjecteur.jpg',
+            'est_vedette' => 1
+        ],
+        [
+            'nom' => 'Vidéoprojecteur Professionnel',
+            'description' => 'Projecteur professionnel 4000 lumens, idéal pour grandes salles',
+            'categorie' => 'Vidéoprojecteurs',
+            'image' => 'assets/images/produits/videoProjecteur/videoProjecteur2.jpg',
+            'est_vedette' => 0
+        ],
+        [
+            'nom' => 'Vidéoprojecteur Compact',
+            'description' => 'Mini projecteur portable, parfait pour présentations en déplacement',
+            'categorie' => 'Vidéoprojecteurs',
+            'image' => 'assets/images/produits/videoProjecteur/istockphoto-157280249-612x612.jpg',
             'est_vedette' => 0
         ]
     ];
@@ -235,11 +298,13 @@ try {
                 nom_produit,
                 description_produit,
                 id_categorie,
+                image_url_produit,
                 est_vedette
             ) VALUES (
                 :nom,
                 :description,
                 :id_categorie,
+                :image,
                 :est_vedette
             )
         ";
@@ -248,6 +313,7 @@ try {
         $statement_produit->bindParam(':nom', $produit['nom']);
         $statement_produit->bindParam(':description', $produit['description']);
         $statement_produit->bindParam(':id_categorie', $id_categorie);
+        $statement_produit->bindParam(':image', $produit['image']);
         $statement_produit->bindParam(':est_vedette', $produit['est_vedette']);
         $statement_produit->execute();
         
