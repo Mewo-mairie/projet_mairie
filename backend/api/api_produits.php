@@ -1,83 +1,102 @@
 <?php
-// API pour gérer les produits
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
-header('Access-Control-Allow-Headers: Content-Type');
 
-require_once __DIR__ . '/../models/modele_produit.php';
-
-$modele_produit = new ModeleProduit();
-$methode = $_SERVER['REQUEST_METHOD'];
+require_once __DIR__ . '/../config/database.php';
 
 try {
-    switch ($methode) {
-        case 'GET':
-            if (isset($_GET['id'])) {
-                // Récupérer un produit par ID
-                $produit = $modele_produit->obtenirProduitParId($_GET['id']);
-                echo json_encode(['success' => true, 'produit' => $produit]);
-            } elseif (isset($_GET['categorie'])) {
-                // Récupérer les produits par catégorie
-                $produits = $modele_produit->obtenirProduitsParCategorie($_GET['categorie']);
-                echo json_encode(['success' => true, 'produits' => $produits]);
-            } elseif (isset($_GET['vedettes'])) {
-                // Récupérer les produits vedettes
-                $produits = $modele_produit->obtenirProduitsVedettes();
-                echo json_encode(['success' => true, 'produits' => $produits]);
-            } else {
-                // Récupérer tous les produits
-                $produits = $modele_produit->obtenirTousLesProduits();
-                echo json_encode(['success' => true, 'produits' => $produits]);
+    $db = obtenirConnexionBD();
+    
+    if (isset($_GET['id'])) {
+        $stmt = $db->prepare("
+            SELECT p.*, c.nom_categorie 
+            FROM produits p 
+            LEFT JOIN categories c ON p.id_categorie = c.id_categorie 
+            WHERE p.id_produit = :id
+        ");
+        $stmt->execute(['id' => $_GET['id']]);
+        $produit = $stmt->fetch();
+        
+        echo json_encode([
+            'success' => true,
+            'produit' => $produit
+        ]);
+    } elseif (isset($_GET['ids'])) {
+        // Charger plusieurs produits par leurs IDs
+        $ids = explode(',', $_GET['ids']);
+        $placeholders = str_repeat('?,', count($ids) - 1) . '?';
+        $stmt = $db->prepare("
+            SELECT p.*, c.nom_categorie 
+            FROM produits p 
+            LEFT JOIN categories c ON p.id_categorie = c.id_categorie 
+            WHERE p.id_produit IN ($placeholders)
+        ");
+        $stmt->execute($ids);
+        $produits = $stmt->fetchAll();
+        
+        // Réorganiser les produits dans l'ordre des IDs fournis
+        $produitsOrdonnes = [];
+        foreach ($ids as $id) {
+            foreach ($produits as $produit) {
+                if ($produit['id_produit'] == $id) {
+                    $produitsOrdonnes[] = $produit;
+                    break;
+                }
             }
-            break;
-            
-        case 'POST':
-            // Créer un nouveau produit
-            $donnees = json_decode(file_get_contents('php://input'), true);
-            
-            $id = $modele_produit->creerProduit(
-                $donnees['nom_produit'],
-                $donnees['description_produit'] ?? '',
-                $donnees['id_categorie'],
-                $donnees['image_url_produit'] ?? '',
-                $donnees['est_vedette'] ?? 0
-            );
-            
-            echo json_encode(['success' => true, 'message' => 'Produit créé', 'id' => $id]);
-            break;
-            
-        case 'PUT':
-            // Modifier un produit
-            $donnees = json_decode(file_get_contents('php://input'), true);
-            
-            $resultat = $modele_produit->modifierProduit(
-                $donnees['id_produit'],
-                $donnees['nom_produit'],
-                $donnees['description_produit'] ?? '',
-                $donnees['id_categorie'],
-                $donnees['image_url_produit'] ?? '',
-                $donnees['est_vedette'] ?? 0
-            );
-            
-            echo json_encode(['success' => $resultat, 'message' => 'Produit modifié']);
-            break;
-            
-        case 'DELETE':
-            // Supprimer un produit
-            $donnees = json_decode(file_get_contents('php://input'), true);
-            
-            $resultat = $modele_produit->supprimerProduit($donnees['id_produit']);
-            
-            echo json_encode(['success' => $resultat, 'message' => 'Produit supprimé']);
-            break;
-            
-        default:
-            http_response_code(405);
-            echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'produits' => $produitsOrdonnes
+        ]);
+    } elseif (isset($_GET['vedettes'])) {
+        $stmt = $db->query("
+            SELECT p.*, c.nom_categorie 
+            FROM produits p 
+            LEFT JOIN categories c ON p.id_categorie = c.id_categorie 
+            WHERE p.est_vedette = 1
+            ORDER BY p.date_ajout_produit DESC
+        ");
+        $produits = $stmt->fetchAll();
+        
+        echo json_encode([
+            'success' => true,
+            'produits' => $produits
+        ]);
+    } elseif (isset($_GET['categorie'])) {
+        $stmt = $db->prepare("
+            SELECT p.*, c.nom_categorie 
+            FROM produits p 
+            LEFT JOIN categories c ON p.id_categorie = c.id_categorie 
+            WHERE p.id_categorie = :categorie
+            ORDER BY p.nom_produit
+        ");
+        $stmt->execute(['categorie' => $_GET['categorie']]);
+        $produits = $stmt->fetchAll();
+        
+        echo json_encode([
+            'success' => true,
+            'produits' => $produits
+        ]);
+    } else {
+        $stmt = $db->query("
+            SELECT p.*, c.nom_categorie 
+            FROM produits p 
+            LEFT JOIN categories c ON p.id_categorie = c.id_categorie 
+            ORDER BY p.nom_produit
+        ");
+        $produits = $stmt->fetchAll();
+        
+        echo json_encode([
+            'success' => true,
+            'produits' => $produits
+        ]);
     }
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Erreur serveur: ' . $e->getMessage()
+    ]);
 }
+?>

@@ -1,31 +1,32 @@
 <?php
-// API pour vérifier si une session est active
-
 session_start();
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET');
-header('Access-Control-Allow-Headers: Content-Type');
 
-if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
-    http_response_code(405);
-    echo json_encode(['connecte' => false, 'message' => 'Méthode non autorisée']);
-    exit;
+$response = [
+    'connecte' => false,
+    'utilisateur' => null
+];
+
+if (isset($_SESSION['utilisateur_id'])) {
+    require_once __DIR__ . '/../config/database.php';
+    
+    try {
+        $db = obtenirConnexionBD();
+        $stmt = $db->prepare("SELECT id_utilisateur, nom_utilisateur, prenom_utilisateur, email_utilisateur, role_utilisateur 
+                              FROM utilisateurs WHERE id_utilisateur = :id");
+        $stmt->execute(['id' => $_SESSION['utilisateur_id']]);
+        $user = $stmt->fetch();
+        
+        if ($user) {
+            $response['connecte'] = true;
+            $response['utilisateur'] = $user;
+        }
+    } catch (Exception $e) {
+        error_log("Erreur vérification session: " . $e->getMessage());
+    }
 }
 
-// Vérifier si l'utilisateur est connecté
-if (isset($_SESSION['utilisateur_id']) && !empty($_SESSION['utilisateur_id'])) {
-    echo json_encode([
-        'connecte' => true,
-        'utilisateur' => [
-            'id_utilisateur' => $_SESSION['utilisateur_id'],
-            'email_utilisateur' => $_SESSION['utilisateur_email'] ?? '',
-            'prenom_utilisateur' => $_SESSION['utilisateur_prenom'] ?? '',
-            'nom_utilisateur' => $_SESSION['utilisateur_nom'] ?? '',
-            'role_utilisateur' => $_SESSION['utilisateur_role'] ?? 'utilisateur'
-        ]
-    ]);
-} else {
-    echo json_encode(['connecte' => false]);
-}
+echo json_encode($response);
+?>

@@ -1,6 +1,4 @@
 <?php
-// API pour la connexion des utilisateurs
-
 session_start();
 
 header('Content-Type: application/json');
@@ -8,9 +6,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once __DIR__ . '/../models/modele_utilisateur.php';
-
-$modele_utilisateur = new ModeleUtilisateur();
+require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
@@ -18,43 +14,37 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!isset($data['email']) || !isset($data['mot_de_passe'])) {
+    echo json_encode(['succes' => false, 'message' => 'Email et mot de passe requis']);
+    exit;
+}
+
 try {
-    $donnees = json_decode(file_get_contents('php://input'), true);
+    $db = obtenirConnexionBD();
+    $stmt = $db->prepare("SELECT * FROM utilisateurs WHERE email_utilisateur = :email");
+    $stmt->execute(['email' => $data['email']]);
+    $user = $stmt->fetch();
     
-    // Vérifier les champs requis
-    if (empty($donnees['email_utilisateur']) || empty($donnees['mot_de_passe'])) {
-        echo json_encode(['succes' => false, 'message' => 'Email et mot de passe requis']);
-        exit;
-    }
-    
-    // Vérifier les identifiants
-    $utilisateur = $modele_utilisateur->verifierConnexion(
-        $donnees['email_utilisateur'],
-        $donnees['mot_de_passe']
-    );
-    
-    if (!$utilisateur) {
+    if ($user && password_verify($data['mot_de_passe'], $user['mot_de_passe_utilisateur'])) {
+        $_SESSION['utilisateur_id'] = $user['id_utilisateur'];
+        $_SESSION['role'] = $user['role_utilisateur'];
+        
+        echo json_encode([
+            'succes' => true,
+            'message' => 'Connexion réussie',
+            'utilisateur' => [
+                'id' => $user['id_utilisateur'],
+                'email' => $user['email_utilisateur'],
+                'role_utilisateur' => $user['role_utilisateur']
+            ]
+        ]);
+    } else {
         echo json_encode(['succes' => false, 'message' => 'Email ou mot de passe incorrect']);
-        exit;
     }
-    
-    // Créer la session
-    $_SESSION['utilisateur_id'] = $utilisateur['id_utilisateur'];
-    $_SESSION['utilisateur_email'] = $utilisateur['email_utilisateur'];
-    $_SESSION['utilisateur_prenom'] = $utilisateur['prenom_utilisateur'];
-    $_SESSION['utilisateur_nom'] = $utilisateur['nom_utilisateur'];
-    $_SESSION['utilisateur_role'] = $utilisateur['role_utilisateur'];
-    
-    // Supprimer le mot de passe de la réponse
-    unset($utilisateur['mot_de_passe_hash']);
-    
-    echo json_encode([
-        'succes' => true, 
-        'message' => 'Connexion réussie',
-        'utilisateur' => $utilisateur
-    ]);
-    
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['succes' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
+    echo json_encode(['succes' => false, 'message' => 'Erreur serveur']);
 }
+?>

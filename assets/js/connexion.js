@@ -74,7 +74,7 @@ function gererSoumissionFormulaireConnexion(evenement) {
     
     // Préparer les données
     const donneesConnexion = {
-        email_utilisateur: emailUtilisateur,
+        email: emailUtilisateur,
         mot_de_passe: motDePasse
     };
     

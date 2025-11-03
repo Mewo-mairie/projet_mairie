@@ -4,12 +4,13 @@
 #nav-principale {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 12px;
 }
 
 .bouton-catalogue {
     padding: 8px 16px;
-    background: #7a84b400;
+    background: #ffffff2e;
     color: rgb(0, 0, 0);
     text-decoration: none;
     border-radius: 8px;
@@ -57,7 +58,6 @@
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-/* Responsive header */
 @media (max-width: 768px) {
     header {
         flex-direction: column;
@@ -74,20 +74,95 @@
         width: 100%;
         justify-content: center;
     }
+    
+    .hero-section {
+        height: 400px;
+    }
+    
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-slogan {
+        font-size: 1.1rem;
+    }
+    
+    .cta-button {
+        font-size: 1rem;
+        padding: 14px 32px;
+    }
 }
 
 /* Image hero */
-aside {
-    height: 390px;
+.hero-section {
+    position: relative;
+    height: 500px;
+    width: 100%;
+    overflow: hidden;
 }
 
 #hero {
-    background: center center / cover no-repeat;
     position: absolute;
     top: 0;
-    height: 390px;
+    left: 0;
     width: 100%;
+    height: 100%;
     object-fit: cover;
+    z-index: 0;
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.5) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.hero-content {
+    text-align: center;
+    color: white;
+    max-width: 800px;
+    padding: 0 24px;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    line-height: 1.2;
+}
+
+.hero-slogan {
+    font-size: 1.4rem;
+    margin: 0 0 32px 0;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    font-weight: 300;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 16px 40px;
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+    border-radius: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 16px rgba(102, 126, 234, 0.4);
+}
+
+.cta-button:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
 }
 
 div#border {
@@ -98,11 +173,14 @@ div#border {
     z-index: 2;
     top: -15px;
 }
+body {
+    background: linear-gradient(#f7f4f747, #b7bbe247);
+    font-family: roboto;
+    padding-top: 70px;
+}
 #how_it_works {
     margin: 24px 12px 12px;
     padding: 18px 16px;
-    background: linear-gradient(#f7f4f7aa, #b7bbe247);
-    border-radius: 16px;
     border-top: 1px solid #ffffff78;
     border-bottom: 1px solid #0000002a;
     box-shadow: 1px 2px 12px #0000001f;
@@ -213,34 +291,32 @@ div#border {
 /* Sections catégories */
 #categories,
 #best_categories {
-    margin: 40px 12px;
+    margin: 40px auto;
     padding: 0 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 1400px;
 }
 
 #categories h3, #best_categories h3 {
     margin: 0 0 24px 0;
-    font-size: 1.8rem;
-    color: #2c3e50;
+    color: #000000;
     text-align: center;
-    margin: 0 0 24px 0;
-    font-size: 1.8rem;
-    color: #ffffff;
-    text-align: center;
-    background-color: #ffffff24;
-    border-radius: 15px;
     font-size: 18px;
-    backdrop-filter: blur(3px);
     font-weight: 400;
+    padding: 7px;
 }
 
 /* Grille 2 colonnes pour les catégories et produits vedettes */
-.grille-categories {
+.grille-categories { 
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 24px;
+    gap: 94px;
     padding: 24px;
-    width: 90%;
     max-width: 1200px;
+    margin: 0 auto;
+    justify-items: center;
 }
 
 /* Tiles de catégories cliquables */
@@ -253,7 +329,8 @@ div#border {
     transition: all 0.3s ease;
     text-decoration: none;
     background: white;
-    height: 350px;
+    height: 450px;
+    width: 350px;
 }
 
 .tile-categorie:hover {
@@ -262,7 +339,7 @@ div#border {
 }
 
 .tile-categorie img {
-    width: 100%;
+        width: 330px;
     height: 280px;
     object-fit: contain;
     transition: transform 0.3s ease;
@@ -273,13 +350,35 @@ div#border {
 }
 
 .tile-categorie h4 {
-    margin: 0;
+    margin: 0 0 12px 0;
     padding: 16px;
     text-align: center;
     font-size: 1.1rem;
     color: #2c3e50;
     background: white;
     text-transform: capitalize;
+}
+
+.bouton-voir-categorie {
+    display: block;
+    margin: 0 auto 20px;
+    padding: 10px 24px;
+    background: #0066ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
+}
+
+.bouton-voir-categorie:hover {
+    background: #0052cc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
 }
 
 /* Responsive grille */

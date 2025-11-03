@@ -1,64 +1,68 @@
 <?php
-// API pour gérer les catégories
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once __DIR__ . '/../models/modele_categorie.php';
+require_once __DIR__ . '/../config/database.php';
 
-$modele_categorie = new ModeleCategorie();
-$methode = $_SERVER['REQUEST_METHOD'];
+$method = $_SERVER['REQUEST_METHOD'];
 
 try {
-    switch ($methode) {
+    $db = obtenirConnexionBD();
+    
+    switch ($method) {
         case 'GET':
             if (isset($_GET['id'])) {
-                // Récupérer une catégorie par ID
-                $categorie = $modele_categorie->obtenirCategorieParId($_GET['id']);
+                $stmt = $db->prepare("SELECT * FROM categories WHERE id_categorie = :id");
+                $stmt->execute(['id' => $_GET['id']]);
+                $categorie = $stmt->fetch();
                 echo json_encode(['success' => true, 'categorie' => $categorie]);
             } else {
-                // Récupérer toutes les catégories
-                $categories = $modele_categorie->obtenirToutesLesCategories();
+                $stmt = $db->query("SELECT * FROM categories ORDER BY nom_categorie");
+                $categories = $stmt->fetchAll();
                 echo json_encode(['success' => true, 'categories' => $categories]);
             }
             break;
             
         case 'POST':
-            // Créer une nouvelle catégorie
-            $donnees = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(file_get_contents('php://input'), true);
+            $stmt = $db->prepare("
+                INSERT INTO categories (nom_categorie, description_categorie, image_url_categorie) 
+                VALUES (:nom, :description, :image)
+            ");
+            $stmt->execute([
+                'nom' => $data['nom_categorie'],
+                'description' => $data['description_categorie'] ?? '',
+                'image' => $data['image_url_categorie'] ?? ''
+            ]);
             
-            $id = $modele_categorie->creerCategorie(
-                $donnees['nom_categorie'],
-                $donnees['description_categorie'] ?? '',
-                $donnees['image_url_categorie'] ?? ''
-            );
-            
-            echo json_encode(['success' => true, 'message' => 'Catégorie créée', 'id' => $id]);
+            echo json_encode(['success' => true, 'message' => 'Catégorie créée', 'id' => $db->lastInsertId()]);
             break;
             
         case 'PUT':
-            // Modifier une catégorie
-            $donnees = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(file_get_contents('php://input'), true);
+            $stmt = $db->prepare("
+                UPDATE categories 
+                SET nom_categorie = :nom, description_categorie = :description, image_url_categorie = :image 
+                WHERE id_categorie = :id
+            ");
+            $result = $stmt->execute([
+                'id' => $data['id_categorie'],
+                'nom' => $data['nom_categorie'],
+                'description' => $data['description_categorie'] ?? '',
+                'image' => $data['image_url_categorie'] ?? ''
+            ]);
             
-            $resultat = $modele_categorie->modifierCategorie(
-                $donnees['id_categorie'],
-                $donnees['nom_categorie'],
-                $donnees['description_categorie'] ?? '',
-                $donnees['image_url_categorie'] ?? ''
-            );
-            
-            echo json_encode(['success' => $resultat, 'message' => 'Catégorie modifiée']);
+            echo json_encode(['success' => $result, 'message' => 'Catégorie modifiée']);
             break;
             
         case 'DELETE':
-            // Supprimer une catégorie
-            $donnees = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(file_get_contents('php://input'), true);
+            $stmt = $db->prepare("DELETE FROM categories WHERE id_categorie = :id");
+            $result = $stmt->execute(['id' => $data['id_categorie']]);
             
-            $resultat = $modele_categorie->supprimerCategorie($donnees['id_categorie']);
-            
-            echo json_encode(['success' => $resultat, 'message' => 'Catégorie supprimée']);
+            echo json_encode(['success' => $result, 'message' => 'Catégorie supprimée']);
             break;
             
         default:

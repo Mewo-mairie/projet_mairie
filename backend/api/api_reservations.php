@@ -1,6 +1,4 @@
 <?php
-// API pour gérer les réservations
-
 session_start();
 
 header('Content-Type: application/json');
@@ -8,75 +6,86 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once __DIR__ . '/../models/modele_reservation.php';
+require_once __DIR__ . '/../config/database.php';
 
-$modele_reservation = new ModeleReservation();
-$methode = $_SERVER['REQUEST_METHOD'];
+$method = $_SERVER['REQUEST_METHOD'];
 
 try {
-    switch ($methode) {
+    $db = obtenirConnexionBD();
+    
+    switch ($method) {
         case 'GET':
-            if (isset($_GET['id'])) {
-                // Récupérer une réservation par ID
-                $reservation = $modele_reservation->obtenirReservationParId($_GET['id']);
-                echo json_encode(['success' => true, 'reservation' => $reservation]);
-            } elseif (isset($_GET['utilisateur']) || isset($_GET['id_utilisateur'])) {
-                // Récupérer les réservations d'un utilisateur
-                $idUtilisateur = isset($_GET['id_utilisateur']) ? $_GET['id_utilisateur'] : $_GET['utilisateur'];
-                $reservations = $modele_reservation->obtenirReservationsUtilisateur($idUtilisateur);
-                echo json_encode(['success' => true, 'reservations' => $reservations]);
+            if (isset($_GET['id_utilisateur'])) {
+                $stmt = $db->prepare("
+                    SELECT r.*, p.nom_produit, p.image_url_produit,
+                           u.nom_utilisateur, u.prenom_utilisateur, u.email_utilisateur
+                    FROM reservations r
+                    LEFT JOIN produits p ON r.id_produit = p.id_produit
+                    LEFT JOIN utilisateurs u ON r.id_utilisateur = u.id_utilisateur
+                    WHERE r.id_utilisateur = :id_user
+                    ORDER BY r.date_reservation DESC
+                ");
+                $stmt->execute(['id_user' => $_GET['id_utilisateur']]);
             } else {
-                // Récupérer toutes les réservations (pour admin)
-                $reservations = $modele_reservation->obtenirToutesLesReservations();
-                echo json_encode(['success' => true, 'reservations' => $reservations]);
+                $stmt = $db->query("
+                    SELECT r.*, p.nom_produit, p.image_url_produit,
+                           u.nom_utilisateur, u.prenom_utilisateur, u.email_utilisateur
+                    FROM reservations r
+                    LEFT JOIN produits p ON r.id_produit = p.id_produit
+                    LEFT JOIN utilisateurs u ON r.id_utilisateur = u.id_utilisateur
+                    ORDER BY r.date_reservation DESC
+                ");
             }
+            
+            $reservations = $stmt->fetchAll();
+            echo json_encode(['success' => true, 'reservations' => $reservations]);
             break;
             
         case 'POST':
-            // Créer une nouvelle réservation
-            $donnees = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(file_get_contents('php://input'), true);
+            $stmt = $db->prepare("
+                INSERT INTO reservations (id_utilisateur, id_produit, statut_reservation) 
+                VALUES (:id_user, :id_product, 'en_attente')
+            ");
+            $stmt->execute([
+                'id_user' => $data['id_utilisateur'],
+                'id_product' => $data['id_produit']
+            ]);
             
-            // Vérifier si une réservation existe déjà
-            $existe = $modele_reservation->verifierReservationExistante(
-                $donnees['id_utilisateur'],
-                $donnees['id_produit']
-            );
-            
-            if ($existe) {
-                echo json_encode([
-                    'success' => false, 
-                    'message' => 'Vous avez déjà réservé ce produit'
-                ]);
-                break;
-            }
-            
-            $id = $modele_reservation->creerReservation(
-                $donnees['id_utilisateur'],
-                $donnees['id_produit']
-            );
-            
-            echo json_encode(['success' => true, 'message' => 'Réservation créée', 'id' => $id]);
+            echo json_encode(['success' => true, 'message' => 'Réservation créée']);
             break;
             
         case 'PUT':
-            // Modifier le statut d'une réservation (admin)
-            $donnees = json_decode(file_get_contents('php://input'), true);
+            $data = json_decode(file_get_contents('php://input'), true);
             
-            $resultat = $modele_reservation->modifierStatutReservation(
-                $donnees['id_reservation'],
-                $donnees['statut_reservation']
-            );
+            $stmt_get = $db->prepare("SELECT id_produit, statut_reservation FROM reservations WHERE id_reservation = :id");
+            $stmt_get->execute(['id' => $data['id_reservation']]);
+            $reservation = $stmt_get->fetch();
             
-            echo json_encode(['success' => $resultat, 'message' => 'Statut mis à jour']);
-            break;
+            if (!$reservation) {
+                echo json_encode(['success' => false, 'message' => 'Réservation non trouvée']);
+                break;
+            }
             
-        case 'DELETE':
-            // Supprimer une réservation (annuler)
-            $donnees = json_decode(file_get_contents('php://input'), true);
+            $stmt = $db->prepare("
+                UPDATE reservations 
+                SET statut_reservation = :statut, date_modification_statut = CURRENT_TIMESTAMP 
+                WHERE id_reservation = :id
+            ");
+            $result = $stmt->execute([
+                'statut' => $data['statut_reservation'],
+                'id' => $data['id_reservation']
+            ]);
             
-            $resultat = $modele_reservation->supprimerReservation($donnees['id_reservation']);
+            if ($reservation['statut_reservation'] !== 'accepte' && $data['statut_reservation'] === 'accepte') {
+                $db->prepare("UPDATE produits SET quantite_disponible = quantite_disponible - 1 WHERE id_produit = :id AND quantite_disponible > 0")
+                   ->execute(['id' => $reservation['id_produit']]);
+            } elseif ($reservation['statut_reservation'] === 'accepte' && $data['statut_reservation'] !== 'accepte') {
+                $db->prepare("UPDATE produits SET quantite_disponible = quantite_disponible + 1 WHERE id_produit = :id AND quantite_disponible < quantite_totale")
+                   ->execute(['id' => $reservation['id_produit']]);
+            }
             
-            echo json_encode(['success' => $resultat, 'message' => 'Réservation annulée']);
+            echo json_encode(['success' => $result, 'message' => 'Statut mis à jour']);
             break;
             
         default:
@@ -87,3 +96,4 @@ try {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
 }
+?>

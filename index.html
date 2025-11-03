@@ -5,9 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lend&Share - Réservation de matériel municipal</title>
-    <link rel="stylesheet" href="assets/common.css" />
-    <link rel="stylesheet" href="assets/style.css" />
-    <link rel="stylesheet" href="assets/produits.css" />
+    <link rel="stylesheet" href="assets/common.css">
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="stylesheet" href="assets/produits.css">
+    <link rel="stylesheet" href="assets/modal_produit.css">
     <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
 </head>
 
@@ -17,14 +18,20 @@
     </header>
 
     <main>
-        <aside>
+        <aside class="hero-section">
             <video id="hero" autoplay muted loop playsinline>
                 <source src="assets/videos/Create_a_timelaps_202510291656_2uypz.mp4" type="video/mp4">
                 Votre navigateur ne supporte pas la lecture de vidéos.
             </video>
+            <div class="hero-overlay">
+                <div class="hero-content">
+                    <h1 class="hero-title">Empruntez du matériel municipal</h1>
+                    <p class="hero-slogan">Barnums, chaises, tables et plus encore à votre disposition</p>
+                    <a href="pages/categories.php" class="cta-button">Voir le catalogue</a>
+                </div>
+            </div>
         </aside>
         <div id="border"></div>
-        <h2>"Réservez votre produit en quelques clics"</h2>
         <section id="how_it_works" aria-labelledby="howitworks-title">
             <h3 id="howitworks-title">Comment ça marche&nbsp;?</h3>
             <ol class="stepper" role="list">
@@ -58,47 +65,52 @@
                 <a href="pages/categories.php?categorie=1" class="tile-categorie">
                     <img src="assets/images/categories/barnum.jpg" alt="Barnums disponibles à la location">
                     <h4>Barnums</h4>
+                    <button class="bouton-voir-categorie">Voir catégorie</button>
                 </a>
                 <a href="pages/categories.php?categorie=2" class="tile-categorie">
                     <img src="assets/images/categories/chaise.jpg" alt="Chaises disponibles à la location">
                     <h4>Chaises</h4>
+                    <button class="bouton-voir-categorie">Voir catégorie</button>
                 </a>
                 <a href="pages/categories.php?categorie=3" class="tile-categorie">
                     <img src="assets/images/categories/outils.jpg" alt="Outils disponibles à la location">
                     <h4>Outils</h4>
+                    <button class="bouton-voir-categorie">Voir catégorie</button>
                 </a>
                 <a href="pages/categories.php?categorie=4" class="tile-categorie">
                     <img src="assets/images/categories/videoProjecteur.jpg" alt="Vidéoprojecteurs disponibles à la location">
                     <h4>Vidéoprojecteurs</h4>
+                    <button class="bouton-voir-categorie">Voir catégorie</button>
                 </a>
             </div>
         </section>
 
 
-        <section id="best_categories" aria-label="Produits vedettes">
-            <h2>Produits vedettes</h2>
+        <section id="best_categories" aria-label="Derniers produits consultés">
+            <h2>Derniers produits consultés</h2>
             <div class="grille-categories" id="grille-vedettes">
-                <p style="grid-column: 1 / -1; text-align: center; color: #999;">Chargement des produits vedettes...</p>
+                <p style="grid-column: 1 / -1; text-align: center; color: #999;">Chargement des derniers produits consultés...</p>
             </div>
         </section>
     </main>
 
     <footer>
         <section id="footer-container">
-            <section>
-                <p>mentions legales</p>
+            <section class="footer-section">
+                <h3>Mentions Légales</h3>
             </section>
-            <section>
-                <img src="assets/footer_logo.png" alt="Logo bas de page" />
+            <section class="footer-section footer-logo">
+                <img src="assets/footer_logo.png" alt="Logo Lend&Share" />
             </section>
-            <section>
-                <p>contact</p>
+            <section class="footer-section">
+                <h3>Contact</h3>
             </section>
         </section>
     </footer>
 
     <script src="assets/js/header.js"></script>
     <script src="assets/js/video_fade.js"></script>
+    <script src="assets/js/modal_produit.js"></script>
     <script src="assets/js/produits_vedettes.js"></script>
     <script src="script.js"></script>
 </body>

@@ -1,6 +1,20 @@
 document.addEventListener('DOMContentLoaded', async function() {
     await initialiserHeader();
+    initialiserScrollHeader();
 });
+
+function initialiserScrollHeader() {
+    const header = document.querySelector('header');
+    if (!header) return;
+    
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.classList.add('header-scrolled');
+        } else {
+            header.classList.remove('header-scrolled');
+        }
+    });
+}
 
 async function initialiserHeader() {
     const header = document.querySelector('header');

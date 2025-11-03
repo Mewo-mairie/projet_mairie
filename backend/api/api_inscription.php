@@ -1,56 +1,56 @@
 <?php
-// API pour l'inscription des utilisateurs
-
-session_start();
-
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Allow-Headers: Content-Type');
 
-require_once __DIR__ . '/../models/modele_utilisateur.php';
-
-$modele_utilisateur = new ModeleUtilisateur();
+require_once __DIR__ . '/../config/database.php';
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
-    echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+    echo json_encode(['succes' => false, 'message' => 'Méthode non autorisée']);
+    exit;
+}
+
+$data = json_decode(file_get_contents('php://input'), true);
+
+if (!isset($data['nom']) || !isset($data['prenom']) || !isset($data['email']) || !isset($data['mot_de_passe'])) {
+    echo json_encode(['succes' => false, 'message' => 'Tous les champs sont requis']);
     exit;
 }
 
 try {
-    $donnees = json_decode(file_get_contents('php://input'), true);
+    $db = obtenirConnexionBD();
     
-    // Vérifier les champs requis
-    if (empty($donnees['email_utilisateur']) || 
-        empty($donnees['mot_de_passe']) || 
-        empty($donnees['prenom_utilisateur']) || 
-        empty($donnees['nom_utilisateur'])) {
-        echo json_encode(['success' => false, 'message' => 'Tous les champs sont requis']);
+    $stmt = $db->prepare("SELECT id_utilisateur FROM utilisateurs WHERE email_utilisateur = :email");
+    $stmt->execute(['email' => $data['email']]);
+    
+    if ($stmt->fetch()) {
+        echo json_encode(['succes' => false, 'message' => 'Cet email est déjà utilisé']);
         exit;
     }
     
-    // Vérifier si l'email existe déjà
-    if ($modele_utilisateur->emailExiste($donnees['email_utilisateur'])) {
-        echo json_encode(['success' => false, 'message' => 'Cet email est déjà utilisé']);
-        exit;
-    }
+    $hashed_password = password_hash($data['mot_de_passe'], PASSWORD_DEFAULT);
     
-    // Créer l'utilisateur
-    $id = $modele_utilisateur->creerUtilisateur(
-        $donnees['email_utilisateur'],
-        $donnees['mot_de_passe'],
-        $donnees['prenom_utilisateur'],
-        $donnees['nom_utilisateur']
-    );
+    $stmt = $db->prepare("
+        INSERT INTO utilisateurs (nom_utilisateur, prenom_utilisateur, email_utilisateur, mot_de_passe_hash, role_utilisateur) 
+        VALUES (:nom, :prenom, :email, :password, 'utilisateur')
+    ");
+    
+    $stmt->execute([
+        'nom' => $data['nom'],
+        'prenom' => $data['prenom'],
+        'email' => $data['email'],
+        'password' => $hashed_password
+    ]);
     
     echo json_encode([
-        'success' => true, 
-        'message' => 'Inscription réussie',
-        'id_utilisateur' => $id
+        'succes' => true,
+        'message' => 'Inscription réussie'
     ]);
     
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
+    echo json_encode(['succes' => false, 'message' => 'Erreur serveur: ' . $e->getMessage()]);
 }
+?>
