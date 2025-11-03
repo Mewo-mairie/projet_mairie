@@ -1,6 +1,4 @@
-/* Styles communs partagés entre toutes les pages */
 
-/* Reset de base */
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
 img { display: block; max-width: 100%; height: auto; }
@@ -8,36 +6,46 @@ img { display: block; max-width: 100%; height: auto; }
 body {
     background: linear-gradient(#f7f4f747, #b7bbe247);
     font-family: roboto;
+    padding-top: 70px;
 }
 
-/* Header */
 header {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
-    justify-content: space-between;
-    margin: 8px;
-    padding: 8px 12px;
-    border-radius: 15px;
+    gap: 20px;
+    padding: 0.7rem 2rem;
+    background: linear-gradient(to bottom right, #ffffff97, #ffffffb5);
     backdrop-filter: blur(10px);
     position: fixed;
-    z-index: 3;
-    background: linear-gradient(#f7f4f747, #b7bbe247);
-    box-shadow: 1px 2px 12px #00000036;
-    border-top: solid 1px #ffffff78;
-    border-bottom: solid 1px #0000004a;
-    width: 98%;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    transition: all 0.3s ease;
+    justify-items: center;
 }
 
-header img { height: 40px; }
+header.header-scrolled {
+    background: linear-gradient(to bottom right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0));
+    backdrop-filter: blur(20px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    margin: 10px 15px;
+    border-radius: 15px;
+}
 
-/* Style uniforme pour tous les liens et boutons dans le header (sauf logo) */
+header img { 
+    height: 40px;
+    filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.474)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.474)) drop-shadow(0 0 1px rgba(255, 255, 255, 0.474));
+}
+
 header nav a,
 header #boutons-auth a,
 header nav button,
 header #boutons-auth button,
 header button.bouton-connexion {
     padding: 8px 16px;
-    background: #7a84b400;
+    background: #ffffff2e;
     color: rgb(0, 0, 0);
     text-decoration: none;
     border-radius: 8px;
@@ -75,7 +83,6 @@ header button.bouton-connexion:hover {
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
-/* Exception pour les liens du logo */
 header #logo-div a {
     padding: 0;
     background: transparent;
@@ -92,21 +99,13 @@ header #logo-div a:hover {
 
 div#logo-div {
     display: flex;
-    align-items: center;
 }
 
-/* Ancien style button#connexion - remplacé par le style uniforme ci-dessus
-button#connexion {
-    background: #667eea00;
-    color: #000000;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    border-top: solid 1px #ffffff7a;
-    border-bottom: solid 1px #00000033;
-    font-weight: 500;
+nav#nav-principale {
+    display: flex;
+    justify-content: center;
 }
-*/
 
-/* Slider */
 .slider {
     position: relative;
     margin: 16px 8px;
@@ -196,34 +195,90 @@ img {
 .slider .next { right: 6px; }
 
 /* Footer */
+footer {
+    position: relative;
+    background: linear-gradient(135deg, #3f3a55 0%, #2d2840 100%);
+    color: white;
+    padding: 50px 50px 30px;
+    text-align: center;
+    bottom: 0;
+    width: 100%;
+}
+
 #footer-container {
     display: flex;
+    align-items: center;
+    gap: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+    border: 2px outset #d1d1d1;
+    border-radius: 65px;
     justify-content: space-evenly;
-    width: auto;
-    border-top: solid 1px black;
-    margin: 0 13rem;
-    background-color: #0000002e;
-    border-radius: 42px;
-    border-bottom: solid 1px #ffffff5c;
+    width: 50%;
+}
+
+.footer-section {
+    flex: 1;
+}
+
+.footer-section h3 {
+    color: #ffffff;
+    font-size: 1rem;
+    margin: 0 0;
+}
+
+.footer-section p {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #e0e0e0;
+    font-size: 0.95rem;
+}
+
+.footer-section strong {
+    color: #ffffff;
+}
+
+.footer-section a {
+    color: #66b3ff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-section a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.footer-logo {
+    text-align: center;
+    display: flex;
     align-items: center;
+    justify-content: center;
 }
 
-footer {
-    align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background: #8b85a2;
-    color: white;
-    font-weight: 500;
+#footer-container img {
+    height: 45px;
 }
 
-footer img {
-    height: 28px; 
+@media (max-width: 768px) {
+    footer {
+        padding: 30px 20px;
+    }
+    
+    #footer-container {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .footer-section {
+        text-align: center;
+    }
+    
+    .footer-logo {
+        order: -1;
+    }
 }
 
-footer section { text-align: center; }
-
-/* Typographie */
 h1 {
     font-size: 1.2rem;
     text-shadow: 0px 0px 10px #ffffff66, 0 1px 10px #ffffff73, 1px 0 10px #ffffff6b, 0 -1px 10px #ffffff5e;
@@ -240,7 +295,6 @@ h3 {
     margin-left: 1rem;
 }
 
-/* Menu utilisateur */
 .menu-utilisateur {
     position: relative;
 }

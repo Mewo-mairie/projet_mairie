@@ -7,6 +7,10 @@ async function ouvrirModalProduit(id_produit) {
         
         if (donnees.success && donnees.produit) {
             produit_actuel = donnees.produit;
+            
+            // Enregistrer dans les derniers consultés
+            enregistrerProduitConsulte(id_produit);
+            
             afficherModalProduit(produit_actuel);
         } else {
             alert('Impossible de charger les détails du produit');
@@ -15,6 +19,23 @@ async function ouvrirModalProduit(id_produit) {
         console.error('Erreur:', erreur);
         alert('Erreur de connexion au serveur');
     }
+}
+
+function enregistrerProduitConsulte(id_produit) {
+    // Récupérer les derniers consultés
+    let derniersConsultes = JSON.parse(localStorage.getItem('derniersProduitsConsultes') || '[]');
+    
+    // Retirer l'ID s'il existe déjà (pour le remettre en premier)
+    derniersConsultes = derniersConsultes.filter(id => id != id_produit);
+    
+    // Ajouter en premier
+    derniersConsultes.unshift(parseInt(id_produit));
+    
+    // Limiter à 5 produits
+    derniersConsultes = derniersConsultes.slice(0, 5);
+    
+    // Sauvegarder
+    localStorage.setItem('derniersProduitsConsultes', JSON.stringify(derniersConsultes));
 }
 
 function afficherModalProduit(produit) {
@@ -103,18 +124,26 @@ function creerStructureModal() {
 }
 
 function afficherFormulaireReservation(conteneur) {
+    const estDisponible = produit_actuel.quantite_disponible > 0;
+    const quantiteDisponible = produit_actuel.quantite_disponible || 0;
+    
     conteneur.innerHTML = `
-        <div class="formulaire-reservation">
-            <h4>Réserver ce produit</h4>
+        <div class="formulaire-reservation ${!estDisponible ? 'indisponible' : ''}">
+            <h4>Faire une demande</h4>
+            ${estDisponible 
+                ? `<p class="info-quantite">✓ Quantité disponible : ${quantiteDisponible}</p>` 
+                : `<p class="message-indisponible">⚠️ Ce produit n'a plus de disponibilité pour le moment. Vous pouvez tout de même faire une demande qui sera traitée dès qu'un exemplaire sera disponible.</p>`
+            }
             
             <div id="message-reservation-modal" class="message-cache"></div>
             
             <button 
                 id="bouton-reserver-modal" 
-                class="bouton-reserver-modal"
+                class="bouton-reserver-modal ${!estDisponible ? 'indisponible' : ''}"
                 onclick="soumettreReservation()"
+                ${!estDisponible ? '' : ''}
             >
-                Réserver
+                ${estDisponible ? 'Faire une demande' : 'Faire une demande (en attente de disponibilité)'}
             </button>
         </div>
     `;

@@ -63,52 +63,30 @@
 /* Grille des produits */
 .grille-produits {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 24px;
     padding: 24px;
-    width: 60%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
-    justify-items: center;
 }
 
-/* Carte produit - FORMAT PORTRAIT avec cadre blanc */
-
+/* Carte produit */
 .carte-produit {
-    background: linear-gradient(354deg, #bcbcb5, transparent);
+    background: white;
     border-radius: 16px;
-    overflow: visible;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    height: 450px;
-    width: 350px;
+    height: 350px;
     position: relative;
-    padding: 20px;
-}
-
-
-/* Conteneur d'image avec cadre blanc */
-.carte-produit-image-container {
-    width: 100%;
-    height: 280px;
-    position: relative;
-    overflow: hidden;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    margin-bottom: 15px;
-    padding: 0;
-}
-
-.carte-produit-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 6px;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: #ffffff;
+    background-size: 134%;
 }
 
 .carte-produit:hover {
@@ -121,7 +99,7 @@
     width: 100%;
     height: 200px;
     position: relative;
-    background: #bcbcb5;
+    background: #f5f5f5;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -178,54 +156,46 @@
     color: #999;
 }
 
-/* Effet de grisé pour les produits indisponibles */
-.carte-produit.produit-indisponible .carte-produit-image-container {
-    opacity: 0.6;
-    filter: grayscale(0.5);
+/* Overlay pour rendre le texte lisible */
+.carte-produit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to bottom, 
+        rgba(0,0,0,0) 0%, 
+        rgba(0,0,0,0) 50%, 
+        rgba(0,0,0,0.4) 70%, 
+        rgba(0,0,0,0.8) 100%);
+    z-index: 1;
 }
 
 /* Informations du produit - positionnées en bas */
 .carte-produit-infos,
 .carte-produit .info-produit {
-    padding: 0;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    text-align: center;
-    position: relative;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     z-index: 2;
-    margin-top: auto;
+    color: white;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+    min-height: 80px;
 }
 
 .carte-produit-infos h3,
-.carte-produit .info-produit h3,
-.carte-produit .info-produit h4 {
+.carte-produit .info-produit h3 {
     margin: 0 0 12px 0;
     font-size: 1.2rem;
-    color: rgb(6, 6, 6);
+    color: #000000;
     line-height: 1.4;
     font-weight: 600;
-}
-
-.bouton-voir-produit {
-    padding: 10px 24px;
-    background: #0066ff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: 'Roboto', sans-serif;
-    box-shadow: 0 2px 8px rgba(0, 102, 255, 0.3);
-}
-
-.bouton-voir-produit:hover {
-    background: #0052cc;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 102, 255, 0.4);
 }
 
 .categorie-produit,
@@ -254,27 +224,25 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Badge de disponibilité */
-.badge-disponibilite {
+.badge-statut {
     display: inline-block;
-    padding: 8px 14px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
     position: absolute;
-    top: 28px;
-    right: 28px;
-    z-index: 3;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    right: 65px;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.badge-disponibilite.disponible {
-    background: rgba(40, 167, 69, 0.95);
+.badge-disponible {
+    background: rgba(76, 175, 80, 0.95);
     color: white;
 }
 
-.badge-disponibilite.indisponible {
-    background: rgba(220, 53, 69, 0.95);
+.badge-prete {
+    background: rgba(244, 67, 54, 0.95);
     color: white;
 }
 

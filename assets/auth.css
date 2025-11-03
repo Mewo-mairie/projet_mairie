@@ -1,11 +1,9 @@
-/* Styles pour les pages d'authentification (inscription et connexion) */
-
 .page-authentification {
     min-height: calc(100vh - 200px);
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 120px 20px 40px;
+    padding: 60px 20px 40px;
 }
 
 .conteneur-formulaire-authentification {
@@ -30,7 +28,6 @@
     margin: 0 0 30px 0;
 }
 
-/* Zone de message */
 .zone-message {
     padding: 12px 16px;
     border-radius: 8px;
@@ -56,7 +53,6 @@
     display: block;
 }
 
-/* Groupes de champs */
 .groupe-champ {
     margin-bottom: 20px;
 }
@@ -92,7 +88,6 @@
     border-color: #28a745;
 }
 
-/* Messages d'erreur des champs */
 .message-erreur-champ {
     display: block;
     color: #dc3545;
@@ -101,7 +96,6 @@
     min-height: 20px;
 }
 
-/* Aide pour le mot de passe */
 .aide-mot-de-passe {
     margin-top: 8px;
     padding: 12px;
@@ -143,7 +137,6 @@
     color: #28a745;
 }
 
-/* Bouton principal */
 .bouton-principal {
     width: 100%;
     padding: 14px;
@@ -159,7 +152,7 @@
 }
 
 .bouton-principal:hover {
-    background: #ffffff;
+    background: #01398b;
 }
 
 .bouton-principal:active {
@@ -171,7 +164,6 @@
     cursor: not-allowed;
 }
 
-/* Lien alternatif */
 .lien-alternatif {
     text-align: center;
     margin-top: 20px;
@@ -188,7 +180,6 @@
     text-decoration: underline;
 }
 
-/* Animation de chargement */
 .bouton-principal.chargement::after {
     content: "";
     display: inline-block;
@@ -210,7 +201,6 @@
     }
 }
 
-/* Responsive */
 @media (max-width: 600px) {
     .conteneur-formulaire-authentification {
         padding: 30px 20px;
@@ -221,6 +211,6 @@
     }
     
     .page-authentification {
-        padding: 100px 15px 30px;
+        padding: 60px 15px 30px;
     }
 }

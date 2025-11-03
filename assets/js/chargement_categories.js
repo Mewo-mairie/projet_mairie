@@ -89,7 +89,22 @@ function afficherProduits(produits) {
     produits.forEach(produit => {
         const card = document.createElement('div');
         card.className = 'carte-produit';
+        
+        // Vérifier la disponibilité
+        const estDisponible = produit.quantite_disponible > 0;
+        const quantiteDisponible = produit.quantite_disponible || 0;
+        const quantiteTotale = produit.quantite_totale || 1;
+        
+        // Ajouter la classe de disponibilité
+        if (estDisponible) {
+            card.classList.add('produit-disponible');
+        } else {
+            card.classList.add('produit-indisponible');
+        }
+        
+        // Toujours permettre le clic pour voir les détails
         card.onclick = () => ouvrirModalProduit(produit.id_produit);
+        card.style.cursor = 'pointer';
         
         // Ajuster le chemin de l'image pour la page categories.php
         const cheminImage = produit.image_url_produit 
@@ -98,21 +113,22 @@ function afficherProduits(produits) {
                 : produit.image_url_produit)
             : null;
         
-        // Définir l'image comme background de la carte
-        if (cheminImage) {
-            card.style.backgroundImage = `url('${cheminImage}')`;
-        } else {
-            card.style.backgroundColor = '#f5f5f5';
-        }
+        // Badge de disponibilité
+        const badgeDisponibilite = estDisponible 
+            ? `<span class="badge-disponibilite disponible">✓ Disponible (${quantiteDisponible})</span>`
+            : '<span class="badge-disponibilite indisponible">✗ Indisponible</span>';
         
-        const badge = produit.est_vedette == 1 
-            ? '<span class="badge-vedette">⭐ Vedette</span>' 
-            : '';
+        // Utiliser un conteneur d'image pour uniformiser les formats
+        const imageHTML = cheminImage 
+            ? `<div class="carte-produit-image-container"><img src="${cheminImage}" alt="${produit.nom_produit}"></div>`
+            : `<div class="carte-produit-image-container" style="background: #f5f5f5;"></div>`;
         
         card.innerHTML = `
-            ${badge}
+            ${imageHTML}
+            ${badgeDisponibilite}
             <div class="info-produit">
                 <h4>${produit.nom_produit}</h4>
+                <button class="bouton-voir-produit">Voir produit</button>
             </div>
         `;
         
