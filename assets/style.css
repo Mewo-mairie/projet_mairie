@@ -268,11 +268,11 @@ body {
     .stepper-item::before {
         content: "";
         position: absolute;
-        left: 18px;
-        top: 40px;
-        bottom: -22px;
-        width: 4px;
-        background: #d9d7e6;
+        left: 17px;
+        top: 53px;
+        bottom: -44px;
+        width: 1px;
+        background: #00000063;
         border-radius: 999px;
     }
 

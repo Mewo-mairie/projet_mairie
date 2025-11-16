@@ -68,14 +68,6 @@ function afficherModalProduit(produit) {
     categorie.textContent = produit.nom_categorie || 'Sans catégorie';
     description.textContent = produit.description_produit || 'Aucune description disponible';
     
-    if (produit.est_vedette == 1) {
-        badge.textContent = '⭐ Produit vedette';
-        badge.className = 'badge-modal badge-modal-vedette';
-    } else {
-        badge.textContent = '';
-        badge.className = 'badge-modal';
-    }
-    
     afficherFormulaireReservation(conteneur);
     
     modal.style.display = 'flex';
