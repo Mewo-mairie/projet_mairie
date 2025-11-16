@@ -60,13 +60,13 @@
 .menu-item:hover {
     background: rgba(255, 255, 255, 0.1);
     color: white;
-    border-left-color: #0066ff;
+    border-left-color: #0a57a8;
 }
 
 .menu-item.actif {
     background: rgba(0, 102, 255, 0.2);
     color: white;
-    border-left-color: #0066ff;
+    border-left-color: #0a57a8;
 }
 
 .menu-item .icone {
@@ -184,7 +184,7 @@
 }
 
 /* Couleurs des cartes */
-.carte-stat.bleu { border-top: 4px solid #0066ff; }
+.carte-stat.bleu { border-top: 4px solid #0a57a8; }
 .carte-stat.vert { border-top: 4px solid #28a745; }
 .carte-stat.orange { border-top: 4px solid #ff9800; }
 .carte-stat.violet { border-top: 4px solid #9c27b0; }
@@ -215,7 +215,7 @@
 }
 
 .lien-voir-tout {
-    color: #0066ff;
+    color: #0a57a8;
     text-decoration: none;
     font-weight: 500;
     transition: color 0.2s ease;
@@ -332,7 +332,7 @@
 .nombre-reservations {
     display: inline-block;
     margin-top: 8px;
-    background: #0066ff;
+    background: #0a57a8;
     color: white;
     padding: 4px 10px;
     border-radius: 12px;
@@ -358,7 +358,7 @@
 
 .barre-graphique {
     flex: 1;
-    background: linear-gradient(180deg, #0066ff 0%, #0052cc 100%);
+    background: linear-gradient(180deg, #0a57a8 0%, #0052cc 100%);
     border-radius: 6px 6px 0 0;
     position: relative;
     min-height: 20px;
@@ -443,7 +443,7 @@
 }
 
 .bouton-primaire {
-    background: #0066ff;
+    background: #0a57a8;
     color: rgb(0, 0, 0);
 }
 
@@ -506,7 +506,7 @@
 
 .champ-recherche-admin:focus {
     outline: none;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .filtres-categories,
@@ -535,7 +535,7 @@
 
 .select-admin:focus {
     outline: none;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .mini-image-produit {
@@ -767,7 +767,7 @@
 .groupe-champ select:focus,
 .groupe-champ textarea:focus {
     outline: none;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .groupe-champ textarea {
@@ -790,7 +790,7 @@
 }
 
 .apercu-image:hover {
-    border-color: #0066ff;
+    border-color: #0a57a8;
     background: #f0f6ff;
 }
 
@@ -865,7 +865,7 @@
 .stat-valeur {
     font-size: 2rem;
     font-weight: 700;
-    color: #0066ff;
+    color: #0a57a8;
 }
 
 .select-statut-inline {
@@ -880,7 +880,7 @@
 
 .select-statut-inline:focus {
     outline: none;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .details-reservation {
@@ -958,7 +958,7 @@
 
 .select-role-inline:focus {
     outline: none;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .label-statut {
@@ -1040,14 +1040,14 @@
 }
 
 .bouton-pagination:hover {
-    border-color: #0066ff;
+    border-color: #0a57a8;
     background: #f0f6ff;
 }
 
 .bouton-pagination.actif {
-    background: #0066ff;
+    background: #0a57a8;
     color: white;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .pagination-points {

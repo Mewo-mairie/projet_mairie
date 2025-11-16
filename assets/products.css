@@ -19,7 +19,7 @@
 }
 
 .conteneur-recherche input[type="search"]:focus {
-    border-color: #0066ff;
+    border-color: #0a57a8;
     box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
 }
 
@@ -51,13 +51,13 @@
 
 .bouton-categorie:hover {
     background: #ffffff;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 .bouton-categorie.categorie-active {
-    background: #0066ff;
+    background: #0a57a8;
     color: white;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 /* Grille des produits */
@@ -256,7 +256,7 @@
 .bouton-voir-details {
     margin-top: auto;
     padding: 12px;
-    background: #0066ff;
+    background: #0a57a8;
     color: white;
     border: none;
     border-radius: 8px;
@@ -286,7 +286,7 @@
     width: 20px;
     height: 20px;
     margin-left: 10px;
-    border: 3px solid #0066ff;
+    border: 3px solid #0a57a8;
     border-radius: 50%;
     border-top-color: transparent;
     animation: rotation 0.8s linear infinite;
@@ -341,7 +341,7 @@
 }
 
 .navigation-header a.lien-actif {
-    background: #0066ff;
+    background: #0a57a8;
     color: white;
 }
 

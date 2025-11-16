@@ -125,7 +125,7 @@
 }
 
 .modal-categorie {
-    color: #0066ff;
+    color: #0a57a8;
     font-weight: 600;
     font-size: 1rem;
     margin: 0 0 20px 0;
@@ -185,14 +185,14 @@
 
 .groupe-champ-modal input[type="number"]:focus {
     outline: none;
-    border-color: #0066ff;
+    border-color: #0a57a8;
 }
 
 /* Bouton réserver */
 .bouton-reserver-modal {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #0066ff 0%, #0052cc 100%);
+    background: linear-gradient(135deg, #0a57a8 0%, #0052cc 100%);
     color: white;
     border: none;
     border-radius: 8px;
