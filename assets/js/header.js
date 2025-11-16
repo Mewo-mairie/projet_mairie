@@ -48,33 +48,35 @@ function determinerPageActuelle() {
 function creerHeaderHTML(pageActuelle, estConnecte = false) {
     const estDansPages = pageActuelle !== 'accueil';
     const prefixe = estDansPages ? '../' : '';
-    
+
     let headerHTML = `
         <div id="logo-div">
-            <img src="${prefixe}assets/header_logo.png" alt="Logo Lend&Share" />
-            <h1>Lend&Share</h1>
+            <a href="${prefixe}index.html">
+                <img src="${prefixe}assets/header_logo.png" alt="Logo Lend&Share" />
+            </a>
+            <h1 class="logo-text">Lend&Share</h1>
         </div>
     `;
-    
+
     headerHTML += '<nav id="nav-principale">';
-    
+
     switch (pageActuelle) {
         case 'accueil':
-            headerHTML += `<a href="pages/categories.php" class="bouton-catalogue">Accès au Catalogue Complet</a>`;
+            headerHTML += `<a href="pages/categories.php" class="bouton-catalogue"><span class="texte-complet">Accès au Catalogue Complet</span><span class="texte-court">Catalogue</span></a>`;
             break;
-            
+
         case 'categories':
         case 'pages':
             headerHTML += `<a href="${prefixe}index.html" class="bouton-catalogue">Accueil</a>`;
             break;
-            
+
         case 'connexion':
             headerHTML += `
                 <a href="${prefixe}index.html" class="bouton-catalogue">Accueil</a>
                 <a href="categories.php" class="bouton-catalogue">Catalogue</a>
             `;
             break;
-            
+
         case 'inscription':
             headerHTML += `
                 <a href="${prefixe}index.html" class="bouton-catalogue">Accueil</a>
@@ -82,14 +84,24 @@ function creerHeaderHTML(pageActuelle, estConnecte = false) {
             `;
             break;
     }
-    
+
     headerHTML += '</nav>';
     headerHTML += '<div id="boutons-auth">';
-    
+
     if (estConnecte) {
         headerHTML += `
-            <a href="${prefixe}pages/mon_compte.html" class="bouton-secondaire">Mon compte</a>
-            <button onclick="deconnexion()" class="bouton-principal">Déconnexion</button>
+            <a href="${prefixe}pages/mon_compte.html" class="bouton-secondaire bouton-desktop">Mon compte</a>
+            <button onclick="deconnexion()" class="bouton-principal bouton-desktop">Déconnexion</button>
+
+            <div class="menu-compte-mobile">
+                <button class="bouton-compte-mobile" onclick="toggleMenuCompteMobile(event)">
+                    <i class="fas fa-user" style="font-size: 1.2rem;"></i>
+                </button>
+                <div class="menu-deroulant-mobile" id="menu-compte-mobile">
+                    <a href="${prefixe}pages/mon_compte.html">Mon compte</a>
+                    <button onclick="deconnexion()">Déconnexion</button>
+                </div>
+            </div>
         `;
     } else {
         switch (pageActuelle) {
@@ -97,25 +109,80 @@ function creerHeaderHTML(pageActuelle, estConnecte = false) {
             case 'categories':
             case 'pages':
                 headerHTML += `
-                    <a href="${prefixe}pages/inscription.html" class="bouton-secondaire">Inscription</a>
-                    <a href="${prefixe}pages/connexion.html" class="bouton-principal">Connexion</a>
+                    <a href="${prefixe}pages/inscription.html" class="bouton-secondaire bouton-desktop">Inscription</a>
+                    <a href="${prefixe}pages/connexion.html" class="bouton-principal bouton-desktop">Connexion</a>
+
+                    <div class="menu-compte-mobile">
+                        <button class="bouton-compte-mobile" onclick="toggleMenuCompteMobile(event)">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </button>
+                        <div class="menu-deroulant-mobile" id="menu-compte-mobile">
+                            <a href="${prefixe}pages/inscription.html">Inscription</a>
+                            <a href="${prefixe}pages/connexion.html">Connexion</a>
+                        </div>
+                    </div>
                 `;
                 break;
-                
+
             case 'connexion':
-                headerHTML += `<a href="inscription.html" class="bouton-secondaire">Inscription</a>`;
+                headerHTML += `
+                    <a href="inscription.html" class="bouton-secondaire bouton-desktop">Inscription</a>
+
+                    <div class="menu-compte-mobile">
+                        <button class="bouton-compte-mobile" onclick="toggleMenuCompteMobile(event)">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </button>
+                        <div class="menu-deroulant-mobile" id="menu-compte-mobile">
+                            <a href="inscription.html">Inscription</a>
+                        </div>
+                    </div>
+                `;
                 break;
-                
+
             case 'inscription':
-                headerHTML += `<a href="connexion.html" class="bouton-principal">Connexion</a>`;
+                headerHTML += `
+                    <a href="connexion.html" class="bouton-principal bouton-desktop">Connexion</a>
+
+                    <div class="menu-compte-mobile">
+                        <button class="bouton-compte-mobile" onclick="toggleMenuCompteMobile(event)">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </button>
+                        <div class="menu-deroulant-mobile" id="menu-compte-mobile">
+                            <a href="connexion.html">Connexion</a>
+                        </div>
+                    </div>
+                `;
                 break;
         }
     }
-    
+
     headerHTML += '</div>';
-    
+
     return headerHTML;
 }
+
+function toggleMenuCompteMobile(event) {
+    event.stopPropagation();
+    const menu = document.getElementById('menu-compte-mobile');
+    menu.classList.toggle('ouvert');
+}
+
+// Fermer le menu si on clique ailleurs
+document.addEventListener('click', function() {
+    const menu = document.getElementById('menu-compte-mobile');
+    if (menu) {
+        menu.classList.remove('ouvert');
+    }
+});
 
 async function verifierStatutConnexion() {
     try {
