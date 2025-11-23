@@ -9,14 +9,14 @@ $response = [
     'utilisateur' => null
 ];
 
-if (isset($_SESSION['utilisateur_id'])) {
+if (isset($_SESSION['utilisateur_connecte'])) {
     require_once __DIR__ . '/../config/database.php';
-    
+
     try {
         $db = obtenirConnexionBD();
-        $stmt = $db->prepare("SELECT id_utilisateur, nom_utilisateur, prenom_utilisateur, email_utilisateur, role_utilisateur 
+        $stmt = $db->prepare("SELECT id_utilisateur, nom_utilisateur, prenom_utilisateur, email_utilisateur, role_utilisateur
                               FROM utilisateurs WHERE id_utilisateur = :id");
-        $stmt->execute(['id' => $_SESSION['utilisateur_id']]);
+        $stmt->execute(['id' => $_SESSION['utilisateur_connecte']]);
         $user = $stmt->fetch();
         
         if ($user) {

@@ -28,8 +28,8 @@ try {
     $user = $stmt->fetch();
     
     if ($user && password_verify($data['mot_de_passe'], $user['mot_de_passe_utilisateur'])) {
-        $_SESSION['utilisateur_id'] = $user['id_utilisateur'];
-        $_SESSION['role'] = $user['role_utilisateur'];
+        $_SESSION['utilisateur_connecte'] = $user['id_utilisateur'];
+        $_SESSION['role_utilisateur'] = $user['role_utilisateur'];
         
         echo json_encode([
             'succes' => true,

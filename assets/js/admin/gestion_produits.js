@@ -75,9 +75,9 @@ async function chargerTousLesProduits() {
     try {
         const reponse = await fetch('../../backend/api/api_produits.php');
         const donnees = await reponse.json();
-        
-        if (donnees.succes && donnees.donnees) {
-            tous_les_produits = donnees.donnees;
+
+        if (donnees.success && donnees.produits) {
+            tous_les_produits = donnees.produits;
             afficherTableauProduits(tous_les_produits);
         }
     } catch (erreur) {
@@ -239,9 +239,9 @@ async function ouvrirModalModification(id_produit) {
     try {
         const reponse = await fetch(`../../backend/api/api_produits.php?id=${id_produit}`);
         const donnees = await reponse.json();
-        
-        if (donnees.succes && donnees.donnees) {
-            produit_en_cours_edition = donnees.donnees;
+
+        if (donnees.success && donnees.produit) {
+            produit_en_cours_edition = donnees.produit;
             
             document.getElementById('modal-titre').textContent = 'Modifier le produit';
             document.getElementById('id-produit-modif').value = produit_en_cours_edition.id_produit;
@@ -372,8 +372,8 @@ async function soumettreFormulaireProduit(event) {
         }
         
         const donnees = await reponse.json();
-        
-        if (donnees.succes) {
+
+        if (donnees.success) {
             afficherMessageFormulaire(donnees.message, 'succes');
             
             setTimeout(() => {
@@ -408,8 +408,8 @@ async function toggleDisponibilite(id_produit, est_disponible) {
         });
         
         const donnees = await reponse.json();
-        
-        if (donnees.succes) {
+
+        if (donnees.success) {
             chargerTousLesProduits();
         } else {
             alert(donnees.message);
@@ -427,15 +427,17 @@ async function confirmerSuppression(id_produit, nom_produit) {
     if (!confirm(`Êtes-vous sûr de vouloir supprimer "${nom_produit}" ?`)) {
         return;
     }
-    
+
     try {
-        const reponse = await fetch(`../../backend/api/api_produits.php?id=${id_produit}`, {
-            method: 'DELETE'
+        const reponse = await fetch('../../backend/api/api_produits.php', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_produit: id_produit })
         });
-        
+
         const donnees = await reponse.json();
-        
-        if (donnees.succes) {
+
+        if (donnees.success) {
             chargerTousLesProduits();
         } else {
             alert(donnees.message);
