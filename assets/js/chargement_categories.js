@@ -213,15 +213,52 @@ function ajouterBoutonsAdminSurProduits() {
 function ajouterBoutonsAdminSurCarte(carte) {
     const boutonsAdmin = document.createElement('div');
     boutonsAdmin.className = 'boutons-admin-produit';
+
+    // Extraire l'ID du produit depuis l'onclick de la carte
+    const onclickAttr = carte.getAttribute('onclick');
+    const idProduitMatch = onclickAttr ? onclickAttr.match(/ouvrirModalProduit\((\d+)\)/) : null;
+    const idProduit = idProduitMatch ? idProduitMatch[1] : null;
+
     boutonsAdmin.innerHTML = `
-        <button class="bouton-admin-mini bouton-modifier" title="Modifier">✏️</button>
-        <button class="bouton-admin-mini bouton-supprimer" title="Supprimer">🗑️</button>
+        <button class="bouton-admin-mini bouton-modifier" title="Modifier" onclick="event.stopPropagation(); redirectVersModificationProduit(${idProduit})">✏️</button>
+        <button class="bouton-admin-mini bouton-supprimer" title="Supprimer" onclick="event.stopPropagation(); supprimerProduitDepuisPage(${idProduit})">🗑️</button>
     `;
-    
+
     carte.appendChild(boutonsAdmin);
-    boutonsAdmin.addEventListener('click', (e) => e.stopPropagation());
 }
 
 function ouvrirModalAjouterProduit() {
-    alert('Fonctionnalité d\'ajout de produit à implémenter');
+    // Rediriger vers la page admin de gestion des produits
+    window.location.href = 'admin/gestion_produits.php';
+}
+
+function redirectVersModificationProduit(idProduit) {
+    // Rediriger vers la page admin avec l'ID du produit à modifier
+    window.location.href = `admin/gestion_produits.php?modifier=${idProduit}`;
+}
+
+async function supprimerProduitDepuisPage(idProduit) {
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce produit ?')) {
+        return;
+    }
+
+    try {
+        const reponse = await fetch('../backend/api/api_produits.php', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id_produit: parseInt(idProduit) })
+        });
+
+        const donnees = await reponse.json();
+
+        if (donnees.success) {
+            alert('Produit supprimé avec succès');
+            chargerTousLesProduits();
+        } else {
+            alert('Erreur: ' + donnees.message);
+        }
+    } catch (erreur) {
+        console.error('Erreur:', erreur);
+        alert('Erreur lors de la suppression');
+    }
 }

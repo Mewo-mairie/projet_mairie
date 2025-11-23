@@ -17,12 +17,19 @@ document.addEventListener('DOMContentLoaded', function() {
 async function initialiserPageProduits() {
     // Charger les catégories
     await chargerCategories();
-    
+
     // Charger les produits
     await chargerTousLesProduits();
-    
+
     // Initialiser les événements
     initialiserEvenements();
+
+    // Vérifier si un produit doit être modifié (paramètre URL)
+    const urlParams = new URLSearchParams(window.location.search);
+    const idProduitAModifier = urlParams.get('modifier');
+    if (idProduitAModifier) {
+        await ouvrirModalModification(parseInt(idProduitAModifier));
+    }
 }
 
 /**
