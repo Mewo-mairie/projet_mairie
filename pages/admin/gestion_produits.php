@@ -39,21 +39,9 @@ $utilisateur = $_SESSION;
                 <span class="icone">📦</span>
                 <span>Produits</span>
             </a>
-            <a href="gestion_categories.php" class="menu-item">
-                <span class="icone">🏷️</span>
-                <span>Catégories</span>
-            </a>
             <a href="gestion_reservations.php" class="menu-item">
                 <span class="icone">📅</span>
-                <span>Réservations</span>
-            </a>
-            <a href="gestion_utilisateurs.php" class="menu-item">
-                <span class="icone">👥</span>
-                <span>Utilisateurs</span>
-            </a>
-            <a href="logs_admin.php" class="menu-item">
-                <span class="icone">📝</span>
-                <span>Logs</span>
+                <span>Commandes</span>
             </a>
         </nav>
         

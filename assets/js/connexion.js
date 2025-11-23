@@ -133,7 +133,7 @@ async function envoyerConnexionVersAPI(donneesConnexion) {
             setTimeout(function() {
                 // Rediriger vers la page admin si administrateur, sinon vers l'accueil
                 if (donneesReponse.utilisateur && donneesReponse.utilisateur.role_utilisateur === 'administrateur') {
-                    window.location.href = 'admin/tableau_de_bord_admin.php';
+                    window.location.href = 'admin/gestion_produits.php';
                 } else {
                     window.location.href = '../index.html';
                 }
