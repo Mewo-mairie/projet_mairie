@@ -35,10 +35,6 @@ $utilisateur = $_SESSION;
         </div>
         
         <nav class="menu-admin">
-            <a href="tableau_de_bord_admin.php" class="menu-item">
-                <span class="icone">📊</span>
-                <span>Dashboard</span>
-            </a>
             <a href="gestion_produits.php" class="menu-item actif">
                 <span class="icone">📦</span>
                 <span>Produits</span>
