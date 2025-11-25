@@ -122,7 +122,6 @@ function afficherTableauProduits(produits) {
     `;
     
     produits.forEach(produit => {
-        const image_url = produit.image_url_produit || '../../assets/images/default-product.png';
         const badge_classe = produit.quantite_disponible > 0
             ? 'badge-disponible-admin'
             : 'badge-indisponible-admin';
@@ -130,35 +129,62 @@ function afficherTableauProduits(produits) {
             ? 'Disponible'
             : 'Indisponible';
 
+        // Créer les options pour le select de quantité disponible
+        let options_quantite = '';
+        for (let i = 0; i <= produit.quantite_totale; i++) {
+            const selected = i === produit.quantite_disponible ? 'selected' : '';
+            options_quantite += `<option value="${i}" ${selected}>${i}</option>`;
+        }
+
+        // Gérer l'affichage de l'image
+        let image_html = '';
+        if (produit.image_url_produit) {
+            image_html = `<img src="${produit.image_url_produit}" alt="${escapeHtml(produit.nom_produit)}" class="mini-image-produit" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                          <div class="placeholder-image" style="display:none;">
+                              <span>📦</span>
+                          </div>`;
+        } else {
+            image_html = `<div class="placeholder-image">
+                              <span>📦</span>
+                          </div>`;
+        }
+
         html += `
             <tr>
                 <td>
-                    <img src="${image_url}" alt="${escapeHtml(produit.nom_produit)}" class="mini-image-produit" onerror="this.src='../../assets/images/default-product.png'">
+                    ${image_html}
                 </td>
                 <td><strong>${escapeHtml(produit.nom_produit)}</strong></td>
                 <td>${escapeHtml(produit.nom_categorie || 'Sans catégorie')}</td>
                 <td>
+                    <select
+                        class="select-quantite-inline"
+                        onchange="modifierQuantiteDisponible(${produit.id_produit}, parseInt(this.value))"
+                        title="Quantité disponible"
+                    >
+                        ${options_quantite}
+                    </select>
+                </td>
+                <td>
                     <div class="controle-quantite">
                         <button
                             class="bouton-quantite bouton-moins"
-                            onclick="modifierQuantite(${produit.id_produit}, -1, ${produit.quantite_disponible})"
-                            ${produit.quantite_disponible <= 0 ? 'disabled' : ''}
-                            title="Diminuer la quantité"
+                            onclick="modifierQuantiteMax(${produit.id_produit}, -1, ${produit.quantite_totale})"
+                            ${produit.quantite_totale <= 1 ? 'disabled' : ''}
+                            title="Diminuer la quantité max"
                         >
                             −
                         </button>
-                        <span class="valeur-quantite">${produit.quantite_disponible}</span>
+                        <span class="valeur-quantite">${produit.quantite_totale}</span>
                         <button
                             class="bouton-quantite bouton-plus"
-                            onclick="modifierQuantite(${produit.id_produit}, 1, ${produit.quantite_disponible}, ${produit.quantite_totale})"
-                            ${produit.quantite_disponible >= produit.quantite_totale ? 'disabled' : ''}
-                            title="Augmenter la quantité"
+                            onclick="modifierQuantiteMax(${produit.id_produit}, 1, ${produit.quantite_totale})"
+                            title="Augmenter la quantité max"
                         >
                             +
                         </button>
                     </div>
                 </td>
-                <td><strong>${produit.quantite_totale}</strong></td>
                 <td><span class="${badge_classe}">${badge_texte}</span></td>
                 <td class="actions-tableau">
                     <button
@@ -412,22 +438,9 @@ async function soumettreFormulaireProduit(event) {
 }
 
 /**
- * Modifie la quantité disponible d'un produit
+ * Modifie la quantité disponible d'un produit via le select
  */
-async function modifierQuantite(id_produit, changement, quantite_actuelle, quantite_max = null) {
-    const nouvelle_quantite = quantite_actuelle + changement;
-
-    // Vérifications
-    if (nouvelle_quantite < 0) {
-        alert('La quantité ne peut pas être négative');
-        return;
-    }
-
-    if (quantite_max !== null && nouvelle_quantite > quantite_max) {
-        alert('La quantité disponible ne peut pas dépasser la quantité maximale');
-        return;
-    }
-
+async function modifierQuantiteDisponible(id_produit, nouvelle_quantite) {
     try {
         const reponse = await fetch('../../backend/api/api_produits.php', {
             method: 'PUT',
@@ -444,10 +457,47 @@ async function modifierQuantite(id_produit, changement, quantite_actuelle, quant
             chargerTousLesProduits();
         } else {
             alert(donnees.message);
+            chargerTousLesProduits(); // Recharger pour reset le select
         }
     } catch (erreur) {
         console.error('Erreur:', erreur);
-        alert('Erreur lors de la mise à jour de la quantité');
+        alert('Erreur lors de la mise à jour de la quantité disponible');
+        chargerTousLesProduits();
+    }
+}
+
+/**
+ * Modifie la quantité maximale d'un produit
+ */
+async function modifierQuantiteMax(id_produit, changement, quantite_actuelle) {
+    const nouvelle_quantite_max = quantite_actuelle + changement;
+
+    // Vérifications
+    if (nouvelle_quantite_max < 1) {
+        alert('La quantité maximale doit être au moins 1');
+        return;
+    }
+
+    try {
+        const reponse = await fetch('../../backend/api/api_produits.php', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                id_produit: id_produit,
+                quantite_totale: nouvelle_quantite_max
+            })
+        });
+
+        const donnees = await reponse.json();
+
+        if (donnees.success) {
+            chargerTousLesProduits();
+        } else {
+            alert(donnees.message);
+        }
+    } catch (erreur) {
+        console.error('Erreur:', erreur);
+        alert('Erreur lors de la mise à jour de la quantité maximale');
     }
 }
 

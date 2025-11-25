@@ -271,6 +271,11 @@ try {
         $quantite_totale = isset($data['quantite_totale']) ? intval($data['quantite_totale']) : $produitExistant['quantite_totale'];
         $quantite_disponible = isset($data['quantite_disponible']) ? intval($data['quantite_disponible']) : $produitExistant['quantite_disponible'];
 
+        // Si la quantité totale est réduite, ajuster automatiquement la quantité disponible
+        if ($quantite_totale < $produitExistant['quantite_totale'] && $quantite_disponible > $quantite_totale) {
+            $quantite_disponible = $quantite_totale;
+        }
+
         // Validation : la quantité disponible ne peut pas dépasser la quantité totale
         if ($quantite_disponible > $quantite_totale) {
             http_response_code(400);
