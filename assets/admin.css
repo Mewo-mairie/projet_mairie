@@ -639,6 +639,68 @@
     transform: translateX(24px);
 }
 
+/* Contrôle de quantité */
+.controle-quantite {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bouton-quantite {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #e0e0e0;
+    background: white;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #2c3e50;
+}
+
+.bouton-quantite:hover:not(:disabled) {
+    border-color: #0a57a8;
+    background: #f0f6ff;
+    color: #0a57a8;
+}
+
+.bouton-quantite:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.bouton-moins {
+    color: #dc3545;
+}
+
+.bouton-moins:hover:not(:disabled) {
+    border-color: #dc3545;
+    background: #fff5f5;
+    color: #dc3545;
+}
+
+.bouton-plus {
+    color: #28a745;
+}
+
+.bouton-plus:hover:not(:disabled) {
+    border-color: #28a745;
+    background: #f0fff4;
+    color: #28a745;
+}
+
+.valeur-quantite {
+    min-width: 30px;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2c3e50;
+}
+
 .modal-admin-large {
     max-width: 700px;
 }

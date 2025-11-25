@@ -112,8 +112,8 @@ function afficherTableauProduits(produits) {
                     <th>Image</th>
                     <th>Nom</th>
                     <th>Catégorie</th>
-                    <th>Stock</th>
-                    <th>Disponible</th>
+                    <th>Quantité</th>
+                    <th>Quantité Max</th>
                     <th>Statut</th>
                     <th>Actions</th>
                 </tr>
@@ -123,13 +123,13 @@ function afficherTableauProduits(produits) {
     
     produits.forEach(produit => {
         const image_url = produit.image_url_produit || '../../assets/images/default-product.png';
-        const badge_classe = produit.est_disponible == 1 && produit.quantite_disponible > 0 
-            ? 'badge-disponible-admin' 
+        const badge_classe = produit.quantite_disponible > 0
+            ? 'badge-disponible-admin'
             : 'badge-indisponible-admin';
-        const badge_texte = produit.est_disponible == 1 && produit.quantite_disponible > 0 
-            ? 'Disponible' 
+        const badge_texte = produit.quantite_disponible > 0
+            ? 'Disponible'
             : 'Indisponible';
-        
+
         html += `
             <tr>
                 <td>
@@ -137,28 +137,39 @@ function afficherTableauProduits(produits) {
                 </td>
                 <td><strong>${escapeHtml(produit.nom_produit)}</strong></td>
                 <td>${escapeHtml(produit.nom_categorie || 'Sans catégorie')}</td>
-                <td>${produit.quantite_disponible} / ${produit.quantite_totale}</td>
                 <td>
-                    <label class="switch-disponibilite">
-                        <input 
-                            type="checkbox" 
-                            ${produit.est_disponible == 1 ? 'checked' : ''}
-                            onchange="toggleDisponibilite(${produit.id_produit}, this.checked)"
+                    <div class="controle-quantite">
+                        <button
+                            class="bouton-quantite bouton-moins"
+                            onclick="modifierQuantite(${produit.id_produit}, -1, ${produit.quantite_disponible})"
+                            ${produit.quantite_disponible <= 0 ? 'disabled' : ''}
+                            title="Diminuer la quantité"
                         >
-                        <span class="slider-disponibilite"></span>
-                    </label>
+                            −
+                        </button>
+                        <span class="valeur-quantite">${produit.quantite_disponible}</span>
+                        <button
+                            class="bouton-quantite bouton-plus"
+                            onclick="modifierQuantite(${produit.id_produit}, 1, ${produit.quantite_disponible}, ${produit.quantite_totale})"
+                            ${produit.quantite_disponible >= produit.quantite_totale ? 'disabled' : ''}
+                            title="Augmenter la quantité"
+                        >
+                            +
+                        </button>
+                    </div>
                 </td>
+                <td><strong>${produit.quantite_totale}</strong></td>
                 <td><span class="${badge_classe}">${badge_texte}</span></td>
                 <td class="actions-tableau">
-                    <button 
-                        class="bouton-action-petit bouton-modifier" 
+                    <button
+                        class="bouton-action-petit bouton-modifier"
                         onclick="ouvrirModalModification(${produit.id_produit})"
                         title="Modifier"
                     >
                         ✏️
                     </button>
-                    <button 
-                        class="bouton-action-petit bouton-supprimer" 
+                    <button
+                        class="bouton-action-petit bouton-supprimer"
                         onclick="confirmerSuppression(${produit.id_produit}, '${escapeHtml(produit.nom_produit)}')"
                         title="Supprimer"
                     >
@@ -401,19 +412,32 @@ async function soumettreFormulaireProduit(event) {
 }
 
 /**
- * Toggle disponibilité d'un produit
+ * Modifie la quantité disponible d'un produit
  */
-async function toggleDisponibilite(id_produit, est_disponible) {
+async function modifierQuantite(id_produit, changement, quantite_actuelle, quantite_max = null) {
+    const nouvelle_quantite = quantite_actuelle + changement;
+
+    // Vérifications
+    if (nouvelle_quantite < 0) {
+        alert('La quantité ne peut pas être négative');
+        return;
+    }
+
+    if (quantite_max !== null && nouvelle_quantite > quantite_max) {
+        alert('La quantité disponible ne peut pas dépasser la quantité maximale');
+        return;
+    }
+
     try {
         const reponse = await fetch('../../backend/api/api_produits.php', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 id_produit: id_produit,
-                est_disponible: est_disponible ? 1 : 0
+                quantite_disponible: nouvelle_quantite
             })
         });
-        
+
         const donnees = await reponse.json();
 
         if (donnees.success) {
@@ -423,7 +447,7 @@ async function toggleDisponibilite(id_produit, est_disponible) {
         }
     } catch (erreur) {
         console.error('Erreur:', erreur);
-        alert('Erreur lors de la mise à jour');
+        alert('Erreur lors de la mise à jour de la quantité');
     }
 }
 
@@ -481,9 +505,9 @@ function filtrerProduits() {
     
     // Filtre par disponibilité
     if (disponibilite_filtre === 'disponible') {
-        produits_filtres = produits_filtres.filter(p => p.est_disponible == 1 && p.quantite_disponible > 0);
+        produits_filtres = produits_filtres.filter(p => p.quantite_disponible > 0);
     } else if (disponibilite_filtre === 'indisponible') {
-        produits_filtres = produits_filtres.filter(p => p.est_disponible == 0 || p.quantite_disponible == 0);
+        produits_filtres = produits_filtres.filter(p => p.quantite_disponible == 0);
     }
     
     afficherTableauProduits(produits_filtres);

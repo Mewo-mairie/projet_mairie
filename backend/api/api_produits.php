@@ -147,6 +147,26 @@ try {
         $quantite_totale = isset($data['quantite_totale']) ? intval($data['quantite_totale']) : 1;
         $quantite_disponible = isset($data['quantite_disponible']) ? intval($data['quantite_disponible']) : $quantite_totale;
 
+        // Validation : la quantité disponible ne peut pas dépasser la quantité totale
+        if ($quantite_disponible > $quantite_totale) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'La quantité disponible ne peut pas dépasser la quantité totale'
+            ]);
+            exit;
+        }
+
+        // Validation : les quantités ne peuvent pas être négatives
+        if ($quantite_disponible < 0 || $quantite_totale < 0) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Les quantités ne peuvent pas être négatives'
+            ]);
+            exit;
+        }
+
         // Vérifier que la catégorie existe
         $stmt = $db->prepare("SELECT id_categorie FROM categories WHERE id_categorie = :id");
         $stmt->execute(['id' => $id_categorie]);
@@ -250,6 +270,26 @@ try {
         $est_vedette = isset($data['est_vedette']) ? intval($data['est_vedette']) : $produitExistant['est_vedette'];
         $quantite_totale = isset($data['quantite_totale']) ? intval($data['quantite_totale']) : $produitExistant['quantite_totale'];
         $quantite_disponible = isset($data['quantite_disponible']) ? intval($data['quantite_disponible']) : $produitExistant['quantite_disponible'];
+
+        // Validation : la quantité disponible ne peut pas dépasser la quantité totale
+        if ($quantite_disponible > $quantite_totale) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'La quantité disponible ne peut pas dépasser la quantité totale'
+            ]);
+            exit;
+        }
+
+        // Validation : les quantités ne peuvent pas être négatives
+        if ($quantite_disponible < 0 || $quantite_totale < 0) {
+            http_response_code(400);
+            echo json_encode([
+                'success' => false,
+                'message' => 'Les quantités ne peuvent pas être négatives'
+            ]);
+            exit;
+        }
 
         // Si la catégorie a changé, vérifier qu'elle existe
         if ($id_categorie !== $produitExistant['id_categorie']) {
