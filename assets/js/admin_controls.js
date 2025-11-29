@@ -315,20 +315,3 @@ async function supprimerProduit(idProduit) {
     }
 }
 
-/**
- * Déconnecte l'administrateur
- */
-async function deconnecterAdmin() {
-    try {
-        const reponse = await fetch('../backend/api/api_deconnexion.php', {
-            method: 'POST'
-        });
-
-        estAdminConnecte = false;
-        alert('Déconnecté avec succès');
-        location.reload();
-    } catch (erreur) {
-        console.error('Erreur déconnexion:', erreur);
-        alert('Erreur lors de la déconnexion');
-    }
-}

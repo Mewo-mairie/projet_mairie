@@ -545,17 +545,6 @@ h3 {
     box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
 }
 
-.bouton-admin.bouton-deconnexion {
-    background: #f44336;
-    margin-left: auto;
-}
-
-.bouton-admin.bouton-deconnexion:hover {
-    background: #da190b;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
-}
-
 /* ========== MODALS ========== */
 .modal {
     display: none;

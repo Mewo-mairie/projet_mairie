@@ -23,9 +23,6 @@
             <button id="btn-ajouter-produit" class="bouton-admin bouton-ajouter" onclick="ouvrirModalAjouter()">
                 ➕ Ajouter un produit
             </button>
-            <button id="btn-deconnexion-admin" class="bouton-admin bouton-deconnexion" onclick="deconnecterAdmin()">
-                🚪 Déconnexion
-            </button>
         </div>
     </div>
 
