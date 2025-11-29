@@ -12,9 +12,9 @@ async function chargerCategories() {
     try {
         const reponse = await fetch('../backend/api/api_categories.php');
         const donnees = await reponse.json();
-        
-        if (donnees.success && donnees.categories) {
-            afficherCategories(donnees.categories);
+
+        if (donnees.succes && donnees.donnees) {
+            afficherCategories(donnees.donnees);
         }
     } catch (erreur) {
         console.error('Erreur:', erreur);
@@ -130,8 +130,16 @@ function afficherProduits(produits) {
                 <h4>${produit.nom_produit}</h4>
                 <button class="bouton-voir-produit">Voir produit</button>
             </div>
+            <div class="boutons-admin-produit" id="admin-${produit.id_produit}" style="display:none;">
+                <button class="bouton-admin-edit" onclick="event.stopPropagation(); ouvrirModalEditerQuantites(${produit.id_produit}, ${produit.quantite_disponible}, ${produit.quantite_totale})">
+                    ✏️ Quantités
+                </button>
+                <button class="bouton-admin-delete" onclick="event.stopPropagation(); supprimerProduit(${produit.id_produit})">
+                    🗑️ Supprimer
+                </button>
+            </div>
         `;
-        
+
         conteneur.appendChild(card);
     });
 }

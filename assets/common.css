@@ -497,6 +497,239 @@ h3 {
     font-weight: 500;
 }
 
+/* ========== BARRE ADMINISTRATION ========== */
+.barre-admin {
+    display: flex !important;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 15px 20px;
+    margin-top: 70px;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    position: relative;
+    z-index: 90;
+}
+
+.contenu-barre-admin {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.contenu-barre-admin h3 {
+    margin: 0;
+    color: white;
+    font-size: 18px;
+    flex: 0 0 auto;
+}
+
+.bouton-admin {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.bouton-admin.bouton-ajouter {
+    background: #4CAF50;
+}
+
+.bouton-admin.bouton-ajouter:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+}
+
+.bouton-admin.bouton-deconnexion {
+    background: #f44336;
+    margin-left: auto;
+}
+
+.bouton-admin.bouton-deconnexion:hover {
+    background: #da190b;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+
+/* ========== MODALS ========== */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(3px);
+}
+
+.modal-contenu {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    animation: slideIn 0.3s ease;
+}
+
+.modal-contenu.modal-petit {
+    max-width: 400px;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-contenu h2 {
+    margin-top: 0;
+    color: #333;
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 15px;
+}
+
+.modal-contenu form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-contenu label {
+    font-weight: 600;
+    color: #333;
+    font-size: 14px;
+}
+
+.modal-contenu input,
+.modal-contenu textarea,
+.modal-contenu select {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: inherit;
+}
+
+.modal-contenu input:focus,
+.modal-contenu textarea:focus,
+.modal-contenu select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.fermer-modal {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.fermer-modal:hover {
+    color: #000;
+}
+
+.boutons-modal {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.bouton-primaire,
+.bouton-secondaire {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 14px;
+}
+
+.bouton-primaire {
+    background: #667eea;
+    color: white;
+}
+
+.bouton-primaire:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+.bouton-secondaire {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.bouton-secondaire:hover {
+    background: #d0d0d0;
+}
+
+/* ========== BOUTONS ADMIN SUR PRODUITS ========== */
+.boutons-admin-produit {
+    display: flex;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    gap: 8px;
+    z-index: 10;
+}
+
+.carte-produit {
+    position: relative;
+}
+
+.bouton-admin-edit,
+.bouton-admin-delete {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+
+.bouton-admin-edit {
+    background: #FFC107;
+    color: #333;
+}
+
+.bouton-admin-edit:hover {
+    background: #ffb300;
+    transform: scale(1.05);
+}
+
+.bouton-admin-delete {
+    background: #f44336;
+    color: white;
+}
+
+.bouton-admin-delete:hover {
+    background: #da190b;
+    transform: scale(1.05);
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     .categorie { width: 220px; height: 150px; }

@@ -9,7 +9,8 @@ header('Content-Type: application/json; charset=utf-8');
 
 // Inclure les fichiers nécessaires
 require_once __DIR__ . '/../config/config.php';
-require_once __DIR__ . '/../utils/middleware_authentification.php';
+require_once __DIR__ . '/../middleware/middleware_authentification.php';
+require_once __DIR__ . '/../utils/logger.php';
 
 // Fonction pour envoyer une réponse JSON
 function envoyerReponseJSON($code_http, $succes, $message, $donnees = null) {
@@ -29,15 +30,19 @@ function envoyerReponseJSON($code_http, $succes, $message, $donnees = null) {
 }
 
 // Vérifier que l'utilisateur est administrateur
-verifierAdminPourAPI();
+verifierAuthentificationAdmin();
+
+logInfo("Tentative d'upload d'image par l'utilisateur " . $_SESSION['utilisateur_connecte']);
 
 // Vérifier que c'est une requête POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    logWarning("Tentative d'upload avec méthode non-POST: " . $_SERVER['REQUEST_METHOD']);
     envoyerReponseJSON(405, false, "Méthode non autorisée");
 }
 
 // Vérifier qu'un fichier a été envoyé
 if (!isset($_FILES['image']) || $_FILES['image']['error'] === UPLOAD_ERR_NO_FILE) {
+    logWarning("Aucune image fournie dans la requête");
     envoyerReponseJSON(400, false, "Aucune image fournie");
 }
 
@@ -45,6 +50,7 @@ $fichier = $_FILES['image'];
 
 // Vérifier les erreurs d'upload
 if ($fichier['error'] !== UPLOAD_ERR_OK) {
+    logError("Erreur d'upload de fichier", ['code_erreur' => $fichier['error']]);
     envoyerReponseJSON(400, false, "Erreur lors de l'upload : " . $fichier['error']);
 }
 
@@ -103,11 +109,20 @@ $chemin_complet = $dossier_destination . $nom_fichier;
 
 if (move_uploaded_file($fichier['tmp_name'], $chemin_complet)) {
     // Succès
+    logInfo("Image uploadée avec succès", [
+        'nom_fichier' => $nom_fichier,
+        'type' => $type,
+        'chemin' => $chemin_complet
+    ]);
     envoyerReponseJSON(200, true, "Image uploadée avec succès", [
         'nom_fichier' => $nom_fichier,
         'url' => $url_relative,
         'type' => $type
     ]);
 } else {
+    logError("Échec de l'enregistrement de l'image", [
+        'chemin_destination' => $chemin_complet,
+        'tmp_name' => $fichier['tmp_name']
+    ]);
     envoyerReponseJSON(500, false, "Erreur lors de l'enregistrement de l'image");
 }

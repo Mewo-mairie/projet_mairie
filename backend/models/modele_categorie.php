@@ -1,7 +1,7 @@
 <?php
 // Modèle pour gérer les catégories
 
-require_once __DIR__ . '/../config/connexion_base_donnees.php';
+require_once __DIR__ . '/../config/database.php';
 
 class ModeleCategorie {
     
