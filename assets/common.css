@@ -499,7 +499,7 @@ h3 {
 
 /* ========== BARRE ADMINISTRATION ========== */
 .barre-admin {
-    display: flex !important;
+    display: none;
     justify-content: center;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 15px 20px;
@@ -507,6 +507,10 @@ h3 {
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     position: relative;
     z-index: 90;
+}
+
+.barre-admin[style*="display: flex"] {
+    display: flex;
 }
 
 .contenu-barre-admin {
