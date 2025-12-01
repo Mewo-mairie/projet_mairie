@@ -73,9 +73,6 @@
                 <label>Description</label>
                 <textarea id="input-description-produit" rows="3"></textarea>
 
-                <label>Prix (€) *</label>
-                <input type="number" id="input-prix-produit" step="0.01" min="0" required>
-
                 <label>Catégorie *</label>
                 <select id="input-categorie-produit" required>
                     <option value="">Sélectionner une catégorie</option>
