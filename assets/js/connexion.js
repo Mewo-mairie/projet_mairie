@@ -131,9 +131,9 @@ async function envoyerConnexionVersAPI(donneesConnexion) {
             
             // Attendre 1 seconde puis rediriger
             setTimeout(function() {
-                // Rediriger vers la page admin si administrateur, sinon vers l'accueil
+                // Rediriger vers la page des catégories si administrateur, sinon vers l'accueil
                 if (donneesReponse.utilisateur && donneesReponse.utilisateur.role_utilisateur === 'administrateur') {
-                    window.location.href = 'admin/gestion_produits.php';
+                    window.location.href = 'categories.php';
                 } else {
                     window.location.href = '../index.html';
                 }

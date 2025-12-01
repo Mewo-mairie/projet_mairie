@@ -133,7 +133,6 @@ async function ajouterProduit(event) {
 
     const nom = document.getElementById('input-nom-produit').value.trim();
     const description = document.getElementById('input-description-produit').value.trim();
-    const prix = parseFloat(document.getElementById('input-prix-produit').value);
     const categorie = parseInt(document.getElementById('input-categorie-produit').value);
     const dispo = parseInt(document.getElementById('input-dispo-produit').value);
     const total = parseInt(document.getElementById('input-total-produit').value);
@@ -148,7 +147,6 @@ async function ajouterProduit(event) {
     const formData = new FormData();
     formData.append('nom_produit', nom);
     formData.append('description_produit', description);
-    formData.append('prix_produit', prix);
     formData.append('id_categorie', categorie);
     formData.append('quantite_disponible', dispo);
     formData.append('quantite_totale', total);

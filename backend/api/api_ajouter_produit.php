@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Récupérer les données du formulaire
 $nom_produit = isset($_POST['nom_produit']) ? trim($_POST['nom_produit']) : '';
 $description_produit = isset($_POST['description_produit']) ? trim($_POST['description_produit']) : '';
-$prix_produit = isset($_POST['prix_produit']) ? floatval($_POST['prix_produit']) : 0;
 $quantite_disponible = isset($_POST['quantite_disponible']) ? intval($_POST['quantite_disponible']) : 0;
 $quantite_totale = isset($_POST['quantite_totale']) ? intval($_POST['quantite_totale']) : 0;
 $id_categorie = isset($_POST['id_categorie']) ? intval($_POST['id_categorie']) : null;
@@ -49,13 +48,6 @@ if (empty($nom_produit)) {
     logWarning("Tentative d'ajout de produit sans nom", ['admin_id' => $_SESSION['utilisateur_connecte']]);
     http_response_code(400);
     echo json_encode(['succes' => false, 'message' => 'Le nom du produit est obligatoire']);
-    exit;
-}
-
-if ($prix_produit < 0) {
-    logWarning("Tentative d'ajout de produit avec prix négatif", ['nom' => $nom_produit]);
-    http_response_code(400);
-    echo json_encode(['succes' => false, 'message' => 'Le prix doit être positif']);
     exit;
 }
 
@@ -93,7 +85,6 @@ try {
         INSERT INTO produits (
             nom_produit,
             description_produit,
-            prix_produit,
             quantite_disponible,
             quantite_totale,
             id_categorie,
@@ -103,7 +94,6 @@ try {
         ) VALUES (
             :nom,
             :description,
-            :prix,
             :dispo,
             :total,
             :categorie,
@@ -116,7 +106,6 @@ try {
     $result = $stmt->execute([
         'nom' => $nom_produit,
         'description' => $description_produit,
-        'prix' => $prix_produit,
         'dispo' => $quantite_disponible,
         'total' => $quantite_totale,
         'categorie' => $id_categorie,
